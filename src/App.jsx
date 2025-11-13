@@ -5,6 +5,8 @@ import {
   juniorEmployee,
   seniorEmployee,
   availableInterns,
+  availableJuniors,
+  availableSeniors,
 } from "./employees";
 import "./App.css";
 import { Events } from "./events/events.jsx";
@@ -140,17 +142,21 @@ function App() {
     if (count < juniorEmployee.recruitmentCost) {
       return;
     }
-    setCount((prevCount) => prevCount - juniorEmployee.recruitmentCost);
-    setEmployees((prevState) => [...prevState, { ...juniorEmployee }]);
+    const nextJunior = availableJuniors.pop() ?? { ...juniorEmployee };
+
+    setCount((prevCount) => prevCount - nextJunior.recruitmentCost);
+    setEmployees((prevState) => [...prevState, { ...nextJunior }]);
   };
 
   const employSenior = () => {
-    if (count < seniorEmployee.recruitmentCost) {
-      return;
-    }
-    setCount((prevCount) => prevCount - seniorEmployee.recruitmentCost);
-    setEmployees((prevState) => [...prevState, { ...seniorEmployee }]);
-  };
+  if (count < seniorEmployee.recruitmentCost) return;
+
+  const nextSenior = availableSeniors.pop() ?? { ...seniorEmployee };
+
+  setCount(prevCount => prevCount - nextSenior.recruitmentCost);
+  setEmployees(prev => [...prev, nextSenior]);
+};
+
 
   const takeCourse = (course) => {
     setIncomeMultiplier((prevCount) => prevCount * course.multiplierIncrease);
@@ -221,7 +227,7 @@ function App() {
             <p className="interns">
               {getEmployeesByType(employees, "intern").map((intern, i) => (
                 <span key={`intern-${i}`} title={intern.name}>
-                  {intern.image}
+                   <img src={intern.image} alt={intern.name} className="intern-image" />
                 </span>
               ))}
             </p>
@@ -232,7 +238,7 @@ function App() {
             <p className="juniors">
               {getEmployeesByType(employees, "junior").map((employee, i) => (
                 <span key={`junior-${i}`} title={employee.name}>
-                  {employee.image}
+                  <img src={employee.image} alt={employee.name} className="junior-image" />
                 </span>
               ))}
             </p>
@@ -243,7 +249,7 @@ function App() {
             <p className="seniors">
               {getEmployeesByType(employees, "senior").map((employee, i) => (
                 <span key={`senior-${i}`} title={employee.name}>
-                  {employee.image}
+                  <img src={employee.image} alt={employee.name} className="senior-image" />
                 </span>
               ))}
             </p>

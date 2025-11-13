@@ -197,3 +197,15 @@ main {
 .seniors {
   font-size: 3rem;
 }
+
+.senior-image {
+  width: 100px;
+}
+
+.junior-image {
+  width: 90px;
+}
+
+.intern-image {
+  width: 110px;
+}
