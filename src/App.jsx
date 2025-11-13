@@ -10,7 +10,6 @@ import "./App.css";
 import { Events } from "./events/events.jsx";
 import { getRandomEvent } from "./events/events.js";
 
-const MAX_INTERNS = 5;
 const EVENT_INTERVAL_SECONDS = 180;
 
 let secondsPassed = 0;
@@ -132,11 +131,9 @@ function App() {
   }, [nextEvent]);
 
   const employIntern = () => {
-    if (employees.filter((e) => e.type === "intern").length >= MAX_INTERNS) {
-      return;
-    }
-    const nextIntern = availableInterns.pop();
+    const nextIntern = availableInterns.pop() ?? { ...intern };
     setEmployees((prevState) => [...prevState, nextIntern]);
+    setIncomeMultiplier((prevCount) => prevCount * nextIntern.tutoringCostMultiplier);
   };
 
   const employJunior = () => {
@@ -263,22 +260,12 @@ function App() {
           <p>Workers:</p>
           {
             <button
-              disabled={
-                employees.filter((e) => e.type === "intern").length >=
-                MAX_INTERNS
-              }
               onClick={employIntern}
-              title={getRecruitmentButtonText(intern)}
+              title={getRecruitmentButtonText(intern) + `. Each intern reduces your own productivity by ${100 - intern.tutoringCostMultiplier * 100}%."`}
             >
               Employ intern
             </button>
           }
-          {employees.filter((e) => e.type === "intern").length >=
-            MAX_INTERNS && (
-            <p>
-              You have reached the maximum number of interns ({MAX_INTERNS})
-            </p>
-          )}
 
           <button
             disabled={count < juniorEmployee.recruitmentCost}

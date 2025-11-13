@@ -3,6 +3,7 @@ export const intern = {
   salary: 0,
   recruitmentCost: 0,
   productionRate: 0.1,
+  tutoringCostMultiplier: 0.95,
   name: "Intern",
   image: "👶",
 };
