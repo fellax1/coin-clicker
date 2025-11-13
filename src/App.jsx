@@ -1,7 +1,12 @@
 import { useEffect, useState } from "react";
 import "./App.css";
+import { Events } from "./events/events.jsx";
+import { getRandomEvent } from "./events/events.js";
 
 const MAX_INTERNS = 5;
+const EVENT_INTERVAL_SECONDS = 2; 
+
+let secondsPassed = 0;
 
 const intern = {
   type: "intern",
@@ -39,8 +44,10 @@ const availableInterns = [
 function App() {
   const [count, setCount] = useState(0);
   const [employees, setEmployees] = useState([]);
+  const [events, setEvents] = useState([]);
 
   useEffect(() => {
+    // Work timer
     const interval = setInterval(() => {
       let totalProduction = employees.reduce(
         (acc, employee) =>
@@ -50,7 +57,22 @@ function App() {
       setCount((prevCount) => prevCount + totalProduction);
     }, 100);
 
-    return () => clearInterval(interval);
+    // Event timer
+    const eventInterval = setInterval(() => {
+      secondsPassed += 1;
+      if (secondsPassed % EVENT_INTERVAL_SECONDS === 0) {
+        const newEvent = getRandomEvent();
+
+        if (newEvent) {
+          setEvents((prevEvents) => [...prevEvents, newEvent]);
+        }
+      }
+    }, 1000);     
+
+    return () => {
+      clearInterval(interval);
+      clearInterval(eventInterval);
+    };
   }, [employees]);
 
   useEffect(() => {
@@ -201,6 +223,7 @@ function App() {
           >
             Employ senior employee
           </button>
+          <Events events={events} />
         </section>
       </main>
     </>
