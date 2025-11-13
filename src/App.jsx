@@ -33,8 +33,11 @@ function App() {
     useState({ size: 1, period: 0 });
   const [completedCourses, setCompletedCourses] = useState([]);
   const [isClicked, setIsClicked] = useState(false);
+  const [isSpinning, setIsSpinning] = useState(false);
+
   const clickSound = new Audio("sounds/click.mp3");
   const withdrawalSound = new Audio("sounds/cash.wav");
+  const spinningCoinSound = new Audio("sounds/spinning-coin.mp3");
 
   const nextEvent = useCallback(() => {
     const tier = employees.length < 10 ? "tierOne" : count < 1000000 ? "tierTwo" : "tierThree";
@@ -160,6 +163,16 @@ function App() {
     setCompletedCourses((prevCompleted) => [...prevCompleted, course.id]);
   };
 
+const spinCoin = () => {
+  setIsSpinning(false);
+
+  setTimeout(() => {
+    setIsSpinning(true);
+
+    setTimeout(() => setIsSpinning(false), 2000);
+  }, 20);
+};
+
   return (
     <>
       <h1>COIN CLICKER</h1>
@@ -185,7 +198,14 @@ function App() {
               setTimeout(() => setIsClicked(false), 70);
             }}
           >
-            <img className="coin" src="img/coin-1.png" alt="Krona" />
+            <div className={`coin3d ${isSpinning ? "spinning" : "coin"}`}>
+              <img className="front" src="img/coin-1.png" alt="Krona" />
+              <img
+                className="back"
+                src="img/coin-1-back.png"
+                alt="Krona baksida"
+              />
+            </div>
           </button>
           <ul>
             <li>Income per click: {(1 * incomeMultiplier).toFixed(2)} kr</li>
@@ -304,7 +324,11 @@ function App() {
                 completedCourses.length >= courses.length ||
                 completedCourses.includes(course.id)
               }
-              onClick={() => takeCourse(course)}
+              onClick={() => {
+                spinningCoinSound.play();
+                takeCourse(course);
+                spinCoin();
+              }}
               title={`${course.description} (Cost: ${course.cost} kr)`}
             >
               {course.name}
