@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { courses } from "./courses";
 import {
   intern,
@@ -11,24 +11,60 @@ import { Events } from "./events/events.jsx";
 import { getRandomEvent } from "./events/events.js";
 
 const MAX_INTERNS = 5;
-const EVENT_INTERVAL_SECONDS = 2; 
+const EVENT_INTERVAL_SECONDS = 180;
 
 let secondsPassed = 0;
 
 function App() {
   const [count, setCount] = useState(0);
   const [employees, setEmployees] = useState([]);
-  const [events, setEvents] = useState([]);
+  const [events, setEvents] = useState([
+    {
+      name: "Welcome to Coin Clicker!",
+      description:
+        "You have just started your coin clicking company. Get to work, and use your earnings to grow your business. Employ workers and take courses to boost your income.",
+    },
+  ]);
   const [incomeMultiplier, setIncomeMultiplier] = useState(1);
+  const [temporaryPlayerMultiplier, setTemporaryPlayerMultiplier] = useState({
+    size: 1,
+    period: 0,
+  });
+  const [temporaryEmployeeMultiplier, setTemporaryEmployeeMultiplier] =
+    useState({ size: 1, period: 0 });
   const [completedCourses, setCompletedCourses] = useState([]);
   const [isClicked, setIsClicked] = useState(false);
+
+  const nextEvent = useCallback(() => {
+    const tier = employees.length < 5 ? "tierOne" : "tierTwo";
+    const newEvent = getRandomEvent(tier);
+
+    if (newEvent) {
+      const { reward, employeeMultiplier, playerMultiplier } =
+        newEvent.consequences;
+
+      setCount((prevCount) => prevCount + reward);
+
+      if (employeeMultiplier.period !== 0) {
+        setTemporaryEmployeeMultiplier(employeeMultiplier);
+      }
+
+      if (playerMultiplier.period !== 0) {
+        setTemporaryPlayerMultiplier(playerMultiplier);
+      }
+
+      setEvents((prevEvents) => [...prevEvents, newEvent]);
+    }
+  }, [employees]);
 
   useEffect(() => {
     // Work timer
     const interval = setInterval(() => {
       let totalProduction = employees.reduce(
         (acc, employee) =>
-          acc + employee.productionRate * 0.1 - employee.salary * 0.1,
+          acc +
+          employee.productionRate * 0.1 * temporaryEmployeeMultiplier.size -
+          employee.salary * 0.1,
         0,
       );
       setCount((prevCount) => prevCount + totalProduction);
@@ -37,25 +73,55 @@ function App() {
     // Event timer
     const eventInterval = setInterval(() => {
       secondsPassed += 1;
-      if (secondsPassed % EVENT_INTERVAL_SECONDS === 0) {
-        const newEvent = getRandomEvent();
 
-        if (newEvent) {
-          setEvents((prevEvents) => [...prevEvents, newEvent]);
-        }
+      if (temporaryEmployeeMultiplier?.period === 0) {
+        setTemporaryEmployeeMultiplier(() => ({
+          size: 1,
+          period: 0,
+        }));
+      } else if (temporaryEmployeeMultiplier?.period > 0) {
+        setTemporaryEmployeeMultiplier((prev) => ({
+          size: prev.size,
+          period: prev.period - 1,
+        }));
       }
-    }, 1000);     
+
+      if (temporaryPlayerMultiplier?.period === 0) {
+        setTemporaryPlayerMultiplier(() => ({
+          size: 1,
+          period: 0,
+        }));
+      } else if (temporaryPlayerMultiplier?.period > 0) {
+        setTemporaryPlayerMultiplier((prev) => ({
+          size: prev.size,
+          period: prev.period - 1,
+        }));
+      }
+
+      if (secondsPassed % EVENT_INTERVAL_SECONDS === 0) {
+        nextEvent();
+      }
+    }, 1000);
 
     return () => {
       clearInterval(interval);
       clearInterval(eventInterval);
     };
-  }, [employees]);
+  }, [
+    employees,
+    temporaryEmployeeMultiplier,
+    temporaryPlayerMultiplier,
+    nextEvent,
+  ]);
 
   useEffect(() => {
     const handleKeyDown = (event) => {
       if (event.ctrlKey && event.key === "1") {
         setCount((prevCount) => prevCount + 100);
+      } else if (event.ctrlKey && event.key === "2") {
+        setCount((prevCount) => prevCount + 1000);
+      } else if (event.ctrlKey && event.key === "3") {
+        nextEvent();
       }
     };
 
@@ -93,19 +159,26 @@ function App() {
     setIncomeMultiplier((prevCount) => prevCount * course.multiplierIncrease);
     setCount((prevCount) => prevCount - course.cost);
     setCompletedCourses((prevCompleted) => [...prevCompleted, course.id]);
-  }
+  };
 
   return (
     <>
       <h1>COIN CLICKER</h1>
       <main>
         <section className="left">
+          <h2>Events</h2>
+          <Events events={events} />
+        </section>
+        <section className="middle">
           <h2>Company</h2>
           <p className="count">Current balance: {count.toFixed(2)} kronor</p>
           <button
             className={`coin-button ${isClicked ? "clicked" : ""}`}
             onClick={() => {
-              setCount(count + 1);
+              setCount(
+                (count) =>
+                  count + 1 * incomeMultiplier * temporaryPlayerMultiplier.size,
+              );
               setIsClicked(true);
               setTimeout(() => setIsClicked(false), 70);
             }}
@@ -218,7 +291,6 @@ function App() {
           >
             Employ senior employee
           </button>
-          <Events events={events} />
 
           <p>Courses:</p>
           {courses.map((course) => (
@@ -240,6 +312,12 @@ function App() {
           )}
         </section>
       </main>
+      <footer>
+        Temporary player multiplier: x{temporaryPlayerMultiplier.size} (
+        {temporaryPlayerMultiplier.period} s left) | Temporary employee
+        multiplier: x{temporaryEmployeeMultiplier.size} (
+        {temporaryEmployeeMultiplier.period} s left)
+      </footer>
     </>
   );
 }
