@@ -175,6 +175,9 @@ function App() {
           <button
             className={`coin-button ${isClicked ? "clicked" : ""}`}
             onClick={() => {
+              const clickSound = new Audio("drop-coin.mp3");
+              clickSound.play();
+
               setCount(
                 (count) =>
                   count + 1 * incomeMultiplier * temporaryPlayerMultiplier.size,
