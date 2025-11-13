@@ -219,8 +219,8 @@ function App() {
               <h3>Interns</h3>
             )}
             <p className="interns">
-              {getEmployeesByType(employees, "intern").map((intern) => (
-                <span key={intern.name} title={intern.name}>
+              {getEmployeesByType(employees, "intern").map((intern, i) => (
+                <span key={`intern-${i}`} title={intern.name}>
                   {intern.image}
                 </span>
               ))}
@@ -230,8 +230,8 @@ function App() {
               <h3>Junior Employees</h3>
             )}
             <p className="juniors">
-              {getEmployeesByType(employees, "junior").map((employee) => (
-                <span key={employee.name} title={employee.name}>
+              {getEmployeesByType(employees, "junior").map((employee, i) => (
+                <span key={`junior-${i}`} title={employee.name}>
                   {employee.image}
                 </span>
               ))}
@@ -241,15 +241,15 @@ function App() {
               <h3>Senior Employees</h3>
             )}
             <p className="seniors">
-              {getEmployeesByType(employees, "senior").map((employee) => (
-                <span key={employee.name} title={employee.name}>
+              {getEmployeesByType(employees, "senior").map((employee, i) => (
+                <span key={`senior-${i}`} title={employee.name}>
                   {employee.image}
                 </span>
               ))}
             </p>
             <p>Completed workshops: </p>
             {completedCourses.map((courseId) => (
-              <span key={courseId}>
+              <span key={`course-${courseId}`}>
                 {courses.find((c) => c.id === courseId)?.name}
               </span>
             ))}
