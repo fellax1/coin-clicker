@@ -1,4 +1,11 @@
 import { useEffect, useState } from "react";
+import { courses } from "./courses";
+import {
+  intern,
+  juniorEmployee,
+  seniorEmployee,
+  availableInterns,
+} from "./employees";
 import "./App.css";
 import { Events } from "./events/events.jsx";
 import { getRandomEvent } from "./events/events.js";
@@ -8,43 +15,13 @@ const EVENT_INTERVAL_SECONDS = 2;
 
 let secondsPassed = 0;
 
-const intern = {
-  type: "intern",
-  salary: 0,
-  recruitmentCost: 0,
-  productionRate: 0.1,
-  name: "Intern",
-  image: "👶",
-};
-const juniorEmployee = {
-  type: "junior",
-  salary: 0.5,
-  recruitmentCost: 200,
-  productionRate: 1,
-  name: "Noob Junior",
-  image: "👷",
-};
-const seniorEmployee = {
-  type: "senior",
-  salary: 1,
-  recruitmentCost: 500,
-  productionRate: 5,
-  name: "Senior Lopez",
-  image: "🧑‍💼",
-};
-
-const availableInterns = [
-  { ...intern, name: "Leo", image: "👶" },
-  { ...intern, name: "Rohan", image: "🐤" },
-  { ...intern, name: "Yabing", image: "👼" },
-  { ...intern, name: "Janne", image: "🥹" },
-  { ...intern, name: "Frida", image: "😴" },
-];
-
 function App() {
   const [count, setCount] = useState(0);
   const [employees, setEmployees] = useState([]);
   const [events, setEvents] = useState([]);
+  const [incomeMultiplier, setIncomeMultiplier] = useState(1);
+  const [completedCourses, setCompletedCourses] = useState([]);
+  const [isClicked, setIsClicked] = useState(false);
 
   useEffect(() => {
     // Work timer
@@ -112,6 +89,12 @@ function App() {
     setEmployees((prevState) => [...prevState, { ...seniorEmployee }]);
   };
 
+  const takeCourse = (course) => {
+    setIncomeMultiplier((prevCount) => prevCount * course.multiplierIncrease);
+    setCount((prevCount) => prevCount - course.cost);
+    setCompletedCourses((prevCompleted) => [...prevCompleted, course.id]);
+  }
+
   return (
     <>
       <h1>COIN CLICKER</h1>
@@ -119,12 +102,18 @@ function App() {
         <section className="left">
           <h2>Company</h2>
           <p className="count">Current balance: {count.toFixed(2)} kronor</p>
-
-          <button className="coin-button" onClick={() => setCount(count + 1)}>
+          <button
+            className={`coin-button ${isClicked ? "clicked" : ""}`}
+            onClick={() => {
+              setCount(count + 1);
+              setIsClicked(true);
+              setTimeout(() => setIsClicked(false), 70);
+            }}
+          >
             <img className="coin" src="coin-1.png" alt="Krona" />
           </button>
-
           <ul>
+            <li>Income per click: {(1 * incomeMultiplier).toFixed(2)} kr</li>
             <li>
               Income per second:{" "}
               {employees
@@ -185,11 +174,17 @@ function App() {
                 </span>
               ))}
             </p>
+            <p>Completed workshops: </p>
+            {completedCourses.map((courseId) => (
+              <span key={courseId}>
+                {courses.find((c) => c.id === courseId)?.name}
+              </span>
+            ))}
           </div>
         </section>
         <section className="right">
           <h2>Store</h2>
-
+          <p>Workers:</p>
           {
             <button
               disabled={
@@ -224,6 +219,25 @@ function App() {
             Employ senior employee
           </button>
           <Events events={events} />
+
+          <p>Courses:</p>
+          {courses.map((course) => (
+            <button
+              key={course.id}
+              disabled={
+                count < course.cost ||
+                completedCourses.length >= courses.length ||
+                completedCourses.includes(course.id)
+              }
+              onClick={() => takeCourse(course)}
+              title={`${course.description} (Cost: ${course.cost} kr)`}
+            >
+              {course.name}
+            </button>
+          ))}
+          {completedCourses.length === courses.length && (
+            <p>All courses completed!</p>
+          )}
         </section>
       </main>
     </>
