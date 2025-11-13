@@ -35,6 +35,8 @@ function App() {
     useState({ size: 1, period: 0 });
   const [completedCourses, setCompletedCourses] = useState([]);
   const [isClicked, setIsClicked] = useState(false);
+  const clickSound = new Audio("sounds/click.mp3");
+  const withdrawalSound = new Audio("sounds/cash.wav");
 
   const nextEvent = useCallback(() => {
     const tier = employees.length < 10 ? "tierOne" : count < 1000000 ? "tierTwo" : "tierThree";
@@ -178,7 +180,7 @@ function App() {
           <button
             className={`coin-button ${isClicked ? "clicked" : ""}`}
             onClick={() => {
-              const clickSound = new Audio("drop-coin.mp3");
+              const clickSound = new Audio("sounds/drop-coin.mp3");
               clickSound.play();
 
               setCount(
@@ -189,7 +191,7 @@ function App() {
               setTimeout(() => setIsClicked(false), 70);
             }}
           >
-            <img className="coin" src="coin-1.png" alt="Krona" />
+            <img className="coin" src="img/coin-1.png" alt="Krona" />
           </button>
           <ul>
             <li>Income per click: {(1 * incomeMultiplier).toFixed(2)} kr</li>
@@ -266,23 +268,34 @@ function App() {
           <p>Workers:</p>
           {
             <button
-              onClick={employIntern}
-              title={getRecruitmentButtonText(intern) + `. Each intern reduces your own productivity by ${100 - intern.tutoringCostMultiplier * 100}%."`}
+              onClick={ () =>{
+               clickSound.play();
+                employIntern();
+              }}
+              title={
+                getRecruitmentButtonText(intern) +
+                `. Each intern reduces your own productivity by ${100 - intern.tutoringCostMultiplier * 100}%."`
+              }
             >
               Employ intern
             </button>
           }
-
           <button
             disabled={count < juniorEmployee.recruitmentCost}
-            onClick={employJunior}
+            onClick={() => {
+              withdrawalSound.play();
+              employJunior();
+            }}
             title={getRecruitmentButtonText(juniorEmployee)}
           >
             Employ junior employee
           </button>
           <button
             disabled={count < seniorEmployee.recruitmentCost}
-            onClick={employSenior}
+            onClick={ () => {
+              employSenior();
+              withdrawalSound.play();
+            }}
             title={getRecruitmentButtonText(seniorEmployee)}
           >
             Employ senior employee
