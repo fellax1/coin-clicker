@@ -129,7 +129,7 @@ function App() {
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, []);
+  }, [nextEvent]);
 
   const employIntern = () => {
     if (employees.filter((e) => e.type === "intern").length >= MAX_INTERNS) {

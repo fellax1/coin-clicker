@@ -7,7 +7,7 @@ let events = {
       consequences: {
         reward: 0,
         employeeMultiplier: { size: 1, period: 0 },
-        playerMultiplier: { size: 1.75, period: 20 },
+        playerMultiplier: { size: 0.75, period: 20 },
       },
     },
     {
@@ -38,6 +38,26 @@ let events = {
         reward: -150,
         employeeMultiplier: { size: 1, period: 0 },
         playerMultiplier: { size: 1, period: 0 },
+      },
+    },
+    {
+      name: "Startup mentality",
+      description:
+        "Almi finally came throught and gave you a small grant to help with your startup costs. Every little bit helps!",
+      consequences: {
+        reward: 200,
+        employeeMultiplier: { size: 1, period: 0 },
+        playerMultiplier: { size: 1, period: 0 },
+      },
+    },
+    {
+      name: "A new friend",
+      description:
+        "A game developer who is working in the basement across the street heard you hammering away on your keyboard and decided to drop by and say hi. He brought you a red bull and some pizza. You feel energized!",
+      consequences: {
+        reward: 0,
+        employeeMultiplier: { size: 1, period: 0 },
+        playerMultiplier: { size: 2, period: 15 },
       },
     },
   ],
@@ -89,6 +109,16 @@ let events = {
       consequences: {
         reward: -2000,
         employeeMultiplier: { size: 1.9, period: 30 },
+        playerMultiplier: { size: 1, period: 0 },
+      },
+    },
+    {
+      name: "Flue season",
+      description:
+        "A severe flu virus hit your area, leading to many employees calling in sick, and a significant drop in productivity.",
+      consequences: {
+        reward: 0,
+        employeeMultiplier: { size: 0.25, period: 70 },
         playerMultiplier: { size: 1, period: 0 },
       },
     },
