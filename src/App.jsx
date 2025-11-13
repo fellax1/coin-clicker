@@ -16,13 +16,14 @@ function App() {
   const [incomeMultiplier, setIncomeMultiplier] = useState(1);
   const [completedCourses, setCompletedCourses] = useState([]);
   const [isClicked, setIsClicked] = useState(false);
+  const [background, setBackground] = useState("office-0"); // initial bakgrund
 
   useEffect(() => {
     const interval = setInterval(() => {
       let totalProduction = employees.reduce(
         (acc, employee) =>
           acc + employee.productionRate * 0.1 - employee.salary * 0.1,
-        0,
+        0
       );
       setCount((prevCount) => prevCount + totalProduction);
     }, 100);
@@ -44,40 +45,61 @@ function App() {
   }, []);
 
   const employIntern = () => {
-    if (employees.filter((e) => e.type === "intern").length >= MAX_INTERNS) {
+    if (employees.filter((e) => e.type === "intern").length >= MAX_INTERNS)
       return;
-    }
+
     const nextIntern = availableInterns.pop();
-    setEmployees((prevState) => [...prevState, nextIntern]);
+    setEmployees((prev) => [...prev, nextIntern]);
+
+    if (!employees.some((e) => e.type === "intern")) {
+      setBackground("office-1");
+    }
   };
 
   const employJunior = () => {
-    if (count < juniorEmployee.recruitmentCost) {
-      return;
+    if (count < juniorEmployee.recruitmentCost) return;
+    setCount((prev) => prev - juniorEmployee.recruitmentCost);
+    setEmployees((prev) => [...prev, { ...juniorEmployee }]);
+
+    if (!employees.some((e) => e.type === "junior")) {
+      setBackground("office-2");
     }
-    setCount((prevCount) => prevCount - juniorEmployee.recruitmentCost);
-    setEmployees((prevState) => [...prevState, { ...juniorEmployee }]);
   };
 
   const employSenior = () => {
-    if (count < seniorEmployee.recruitmentCost) {
-      return;
+    if (count < seniorEmployee.recruitmentCost) return;
+    setCount((prev) => prev - seniorEmployee.recruitmentCost);
+    setEmployees((prev) => [...prev, { ...seniorEmployee }]);
+
+    if (!employees.some((e) => e.type === "senior")) {
+      setBackground("office-3");
     }
-    setCount((prevCount) => prevCount - seniorEmployee.recruitmentCost);
-    setEmployees((prevState) => [...prevState, { ...seniorEmployee }]);
   };
 
   const takeCourse = (course) => {
-    setIncomeMultiplier((prevCount) => prevCount * course.multiplierIncrease);
-    setCount((prevCount) => prevCount - course.cost);
-    setCompletedCourses((prevCompleted) => [...prevCompleted, course.id]);
-  }
+    setIncomeMultiplier((prev) => prev * course.multiplierIncrease);
+    setCount((prev) => prev - course.cost);
+    setCompletedCourses((prev) => [...prev, course.id]);
+  };
 
   return (
     <>
-      <h1>COIN CLICKER</h1>
+        <video
+      autoPlay
+      muted
+      loop
+      playsInline
+      className="background-video"
+    >
+      <source src="/video1.mp4" type="video/mp4" />
+    </video>
+    
+      <img src="coin-clicker-logo.png" alt="Coin Clicker Logo" className="logo" />
       <main>
-        <section className="left">
+        <section
+          className="left"
+          style={{ backgroundImage: `url(${background}.png)` }}
+        >
           <h2>Company</h2>
           <p className="count">Current balance: {count.toFixed(2)} kronor</p>
           <button
@@ -111,7 +133,7 @@ function App() {
               {(
                 employees.reduce(
                   (acc, employee) => acc + employee.productionRate,
-                  0,
+                  0
                 ) -
                 employees.reduce((acc, employee) => acc + employee.salary, 0)
               ).toFixed(2)}{" "}
@@ -120,9 +142,7 @@ function App() {
           </ul>
 
           <div className="employees">
-            {getEmployeesByType(employees, "intern").length > 0 && (
-              <h3>Interns</h3>
-            )}
+            {getEmployeesByType(employees, "intern").length > 0 && <h3>Interns</h3>}
             <p className="interns">
               {getEmployeesByType(employees, "intern").map((intern) => (
                 <span key={intern.name} title={intern.name}>
@@ -131,9 +151,7 @@ function App() {
               ))}
             </p>
 
-            {getEmployeesByType(employees, "junior").length > 0 && (
-              <h3>Junior Employees</h3>
-            )}
+            {getEmployeesByType(employees, "junior").length > 0 && <h3>Junior Employees</h3>}
             <p className="juniors">
               {getEmployeesByType(employees, "junior").map((employee) => (
                 <span key={employee.name} title={employee.name}>
@@ -142,9 +160,7 @@ function App() {
               ))}
             </p>
 
-            {getEmployeesByType(employees, "senior").length > 0 && (
-              <h3>Senior Employees</h3>
-            )}
+            {getEmployeesByType(employees, "senior").length > 0 && <h3>Senior Employees</h3>}
             <p className="seniors">
               {getEmployeesByType(employees, "senior").map((employee) => (
                 <span key={employee.name} title={employee.name}>
@@ -152,6 +168,7 @@ function App() {
                 </span>
               ))}
             </p>
+
             <p>Completed workshops: </p>
             {completedCourses.map((courseId) => (
               <span key={courseId}>
@@ -160,26 +177,20 @@ function App() {
             ))}
           </div>
         </section>
+
         <section className="right">
           <h2>Store</h2>
           <p>Workers:</p>
-          {
-            <button
-              disabled={
-                employees.filter((e) => e.type === "intern").length >=
-                MAX_INTERNS
-              }
-              onClick={employIntern}
-              title={getRecruitmentButtonText(intern)}
-            >
-              Employ intern
-            </button>
-          }
-          {employees.filter((e) => e.type === "intern").length >=
-            MAX_INTERNS && (
-            <p>
-              You have reached the maximum number of interns ({MAX_INTERNS})
-            </p>
+
+          <button
+            disabled={employees.filter((e) => e.type === "intern").length >= MAX_INTERNS}
+            onClick={employIntern}
+            title={getRecruitmentButtonText(intern)}
+          >
+            Employ intern
+          </button>
+          {employees.filter((e) => e.type === "intern").length >= MAX_INTERNS && (
+            <p>You have reached the maximum number of interns ({MAX_INTERNS})</p>
           )}
 
           <button
@@ -189,6 +200,7 @@ function App() {
           >
             Employ junior employee
           </button>
+
           <button
             disabled={count < seniorEmployee.recruitmentCost}
             onClick={employSenior}
@@ -212,9 +224,7 @@ function App() {
               {course.name}
             </button>
           ))}
-          {completedCourses.length === courses.length && (
-            <p>All courses completed!</p>
-          )}
+          {completedCourses.length === courses.length && <p>All courses completed!</p>}
         </section>
       </main>
     </>
