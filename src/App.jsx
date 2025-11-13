@@ -36,7 +36,7 @@ function App() {
   const [isClicked, setIsClicked] = useState(false);
 
   const nextEvent = useCallback(() => {
-    const tier = employees.length < 5 ? "tierOne" : "tierTwo";
+    const tier = employees.length < 10 ? "tierOne" : count < 1000000 ? "tierTwo" : "tierThree";
     const newEvent = getRandomEvent(tier);
 
     if (newEvent) {
@@ -55,7 +55,7 @@ function App() {
 
       setEvents((prevEvents) => [...prevEvents, newEvent]);
     }
-  }, [employees]);
+  }, [employees, count]);
 
   useEffect(() => {
     // Work timer
