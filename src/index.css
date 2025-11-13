@@ -66,3 +66,21 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 }
+
+.coin {
+  max-height: 300px;
+  border-radius: 150px;
+  border: unset;
+  background-color: white;
+  transition: transform 0.15s ease;
+  outline: none;
+}
+.coin-button.clicked .coin {
+  transform: scale(1.2);
+  border: unset;
+  outline: none;
+}
+.coin-button:focus {
+  outline: none;
+  box-shadow: none;
+}

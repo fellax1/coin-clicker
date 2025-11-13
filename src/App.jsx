@@ -1,6 +1,11 @@
 import { useEffect, useState } from "react";
 import { courses } from "./courses";
-import { intern, juniorEmployee, seniorEmployee, availableInterns } from "./employees";
+import {
+  intern,
+  juniorEmployee,
+  seniorEmployee,
+  availableInterns,
+} from "./employees";
 import "./App.css";
 
 const MAX_INTERNS = 5;
@@ -10,6 +15,7 @@ function App() {
   const [employees, setEmployees] = useState([]);
   const [incomeMultiplier, setIncomeMultiplier] = useState(1);
   const [completedCourses, setCompletedCourses] = useState([]);
+  const [isClicked, setIsClicked] = useState(false);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -74,11 +80,16 @@ function App() {
         <section className="left">
           <h2>Company</h2>
           <p className="count">Current balance: {count.toFixed(2)} kronor</p>
-
-          <button className="coin-button" onClick={() => setCount((count) => count + (1 * incomeMultiplier))}>
+          <button
+            className={`coin-button ${isClicked ? "clicked" : ""}`}
+            onClick={() => {
+              setCount(count + 1);
+              setIsClicked(true);
+              setTimeout(() => setIsClicked(false), 70);
+            }}
+          >
             <img className="coin" src="coin-1.png" alt="Krona" />
           </button>
-
           <ul>
             <li>Income per click: {(1 * incomeMultiplier).toFixed(2)} kr</li>
             <li>
@@ -142,9 +153,11 @@ function App() {
               ))}
             </p>
             <p>Completed workshops: </p>
-              {completedCourses.map(courseId => (
-                <span key={courseId}>{courses.find(c => c.id === courseId)?.name}</span>
-              ))}
+            {completedCourses.map((courseId) => (
+              <span key={courseId}>
+                {courses.find((c) => c.id === courseId)?.name}
+              </span>
+            ))}
           </div>
         </section>
         <section className="right">
@@ -189,7 +202,7 @@ function App() {
             <button
               key={course.id}
               disabled={
-                count < course.cost || 
+                count < course.cost ||
                 completedCourses.length >= courses.length ||
                 completedCourses.includes(course.id)
               }
@@ -199,7 +212,9 @@ function App() {
               {course.name}
             </button>
           ))}
-          {completedCourses.length === courses.length && <p>All courses completed!</p>}
+          {completedCourses.length === courses.length && (
+            <p>All courses completed!</p>
+          )}
         </section>
       </main>
     </>
