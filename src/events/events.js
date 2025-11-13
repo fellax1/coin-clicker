@@ -30,6 +30,16 @@ let events = {
         playerMultiplier: { size: 0, period: 10 },
       },
     },
+    {
+      name: "Computer virus",
+      description:
+        "Did you really think it was a good idea to click the button that said 'Download more RAM'? Your computer got infected with a virus, and you had to pay a tech support fee to get it fixed.",
+      consequences: {
+        reward: -150,
+        employeeMultiplier: { size: 1, period: 0 },
+        playerMultiplier: { size: 1, period: 0 },
+      },
+    },
   ],
   tierTwo: [
     {
