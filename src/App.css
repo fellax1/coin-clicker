@@ -143,11 +143,13 @@ main {
 }
 
 .left,
+.middle,
 .right {
-  flex: 1 1 50%;
+  flex: 1 1 33%;
 }
 
 .left,
+.middle,
 .right {
   height: 100%;
   display: flex;
