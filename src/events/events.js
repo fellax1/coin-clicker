@@ -203,7 +203,7 @@ export function getMilestoneEvent(milestone) {
         },
       };
 
-    case "tenEmployees":
+    case "fiftyEmployees":
       return {
         ...baseEvent,
         name: "Milestone reached: 50 employees 🏆",

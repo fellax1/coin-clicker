@@ -58,7 +58,7 @@ function App() {
     oneHundredThousand: null,
     oneMillion: null,
     oneBillion: null,
-    tenEmployees: null,
+    fiftyEmployees: null,
     oneHundredEmployees: null,
     oneThousandEmployees: null,
   });
@@ -100,9 +100,9 @@ function App() {
       balanceEvent = getMilestoneEvent("oneBillion", secondsPassed);
     }
 
-    if (employees.length >= 10 && !milestones.tenEmployees) {
-      setMilestones((prev) => ({ ...prev, tenEmployees: secondsPassed }));
-      employerEvent = getMilestoneEvent("tenEmployees", secondsPassed);
+    if (employees.length >= 10 && !milestones.fiftyEmployees) {
+      setMilestones((prev) => ({ ...prev, fiftyEmployees: secondsPassed }));
+      employerEvent = getMilestoneEvent("fiftyEmployees", secondsPassed);
     } else if (employees.length >= 100 && !milestones.oneHundredEmployees) {
       setMilestones((prev) => ({
         ...prev,
