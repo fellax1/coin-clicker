@@ -265,34 +265,6 @@ const spinCoin = () => {
       <main>
         <section className="left">
           <h2>Events</h2>
-          <ul className="stats-list">
-            <li>Income per click: <span className="bold">{(1 * incomeMultiplier).toFixed(2)} kr</span></li>
-            <li>
-              Income per second:{" "}
-              <span className="bold">{employees
-                .reduce((acc, employee) => acc + employee.productionRate, 0)
-                .toFixed(2)}{" "}
-              kr</span>
-            </li>
-            <li>
-              Expenses per second:{" "}
-              <span className="bold">{employees
-                .reduce((acc, employee) => acc + employee.salary, 0)
-                .toFixed(2)}{" "}
-              kr</span>
-            </li>
-            <li>
-              Net income per second:{" "}
-              <span className="bold">{(
-                employees.reduce(
-                  (acc, employee) => acc + employee.productionRate,
-                  0,
-                ) -
-                employees.reduce((acc, employee) => acc + employee.salary, 0)
-              ).toFixed(2)}{" "}
-              kr</span>
-            </li>
-          </ul>
           <Events events={events} />
         </section>
         <section className="middle">
@@ -358,6 +330,35 @@ const spinCoin = () => {
                 </span>
               ))}
             </p>
+
+             <ul className="stats-list">
+            <li>Income per click: <span className="bold">{(1 * incomeMultiplier).toFixed(2)} kr</span></li>
+            <li>
+              Income per second:{" "}
+              <span className="bold">{employees
+                .reduce((acc, employee) => acc + employee.productionRate, 0)
+                .toFixed(2)}{" "}
+              kr</span>
+            </li>
+            <li>
+              Expenses per second:{" "}
+              <span className="bold">{employees
+                .reduce((acc, employee) => acc + employee.salary, 0)
+                .toFixed(2)}{" "}
+              kr</span>
+            </li>
+            <li>
+              Net income per second:{" "}
+              <span className="bold">{(
+                employees.reduce(
+                  (acc, employee) => acc + employee.productionRate,
+                  0,
+                ) -
+                employees.reduce((acc, employee) => acc + employee.salary, 0)
+              ).toFixed(2)}{" "}
+              kr</span>
+            </li>
+          </ul>
           </div>
         </section>
         <section className="right">

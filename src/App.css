@@ -170,6 +170,7 @@ main {
   display: block;
   font-size: 28px;
   font-variant-numeric: tabular-nums;
+  margin-bottom: 8px;
   text-align: center;
 }
 
@@ -233,8 +234,7 @@ main {
 }
 
 .stats-list {
-  margin-left: 38px;
-  width: 100%;
+  margin-top: 8px;
   gap: 8px;
   display: flex;
   flex-direction: column;
