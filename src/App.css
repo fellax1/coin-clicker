@@ -255,6 +255,14 @@ section > h2 {
   font-size: 3rem;
 }
 
+.engineers {
+  font-size: 3.5rem;
+}
+
+.scientists {
+  font-size: 4rem;
+}
+
 .coin3d {
   position: relative;
   width: 300px;

@@ -4,8 +4,8 @@ export const intern = {
   recruitmentCost: 0,
   productionRate: 0.1,
   tutoringCostMultiplier: 0.95,
-  name: "Intern",
-  image: "👶",
+  name: "Blue eyed intern",
+  image: "👼",
 };
 
 export const juniorEmployee = {
@@ -13,7 +13,7 @@ export const juniorEmployee = {
   salary: 0.5,
   recruitmentCost: 200,
   productionRate: 1,
-  name: "Noob Junior",
+  name: "Emile Paloyeux Junior",
   image: "👷",
 };
 
@@ -22,14 +22,32 @@ export const seniorEmployee = {
   salary: 1,
   recruitmentCost: 500,
   productionRate: 5,
-  name: "Senior Lopez",
+  name: "Señor Lopez",
   image: "🧑‍💼",
 };
 
+export const engineer = {
+  type: "engineer",
+  salary: 5,
+  recruitmentCost: 2000,
+  productionRate: 20,
+  name: "Uncle Bob",
+  image: "👨‍🔧",
+};
+
+export const scientist = {
+  type: "scientist",
+  salary: 20,
+  recruitmentCost: 100000,
+  productionRate: 100,
+  name: "Marie Curie",
+  image: "👩‍🔬",
+};
+
 export const availableInterns = [
-  { ...intern, name: "Leo", image: "👶" },
-  { ...intern, name: "Rohan", image: "🐤" },
+  { ...intern, name: "Leo", image: "👼" },
+  { ...intern, name: "Rohan", image: "👼" },
   { ...intern, name: "Yabing", image: "👼" },
-  { ...intern, name: "Janne", image: "🥹" },
-  { ...intern, name: "Frida", image: "😴" },
+  { ...intern, name: "Janne", image: "👼" },
+  { ...intern, name: "Frida", image: "👼" },
 ];

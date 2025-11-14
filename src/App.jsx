@@ -5,6 +5,8 @@ import {
   juniorEmployee,
   seniorEmployee,
   availableInterns,
+  engineer,
+  scientist,
 } from "./employees";
 import "./App.css";
 import { Events } from "./events/events.jsx";
@@ -246,6 +248,22 @@ function App() {
     setEmployees((prevState) => [...prevState, { ...seniorEmployee }]);
   };
 
+  const employEngineer = () => {
+    if (count < engineer.recruitmentCost) {
+      return;
+    }
+    setCount((prevCount) => prevCount - engineer.recruitmentCost);
+    setEmployees((prevState) => [...prevState, { ...engineer }]);
+  }
+
+  const employScientist = () => {
+    if (count < scientist.recruitmentCost) {
+      return;
+    }
+    setCount((prevCount) => prevCount - scientist.recruitmentCost);
+    setEmployees((prevState) => [...prevState, { ...scientist }]);
+  }
+
   const takeCourse = (course) => {
     setIncomeMultiplier((prevCount) => prevCount * course.multiplierIncrease);
     setCount((prevCount) => prevCount - course.cost);
@@ -327,17 +345,38 @@ const spinCoin = () => {
             </li>
           </ul>
           <div className="employees">
-            {getEmployeesByType(employees, "intern").length > 0 && (
-              <h3>Interns</h3>
+              {getEmployeesByType(employees, "scientist").length > 0 && (
+              <h3>Scientists</h3>
             )}
-            <p className="interns">
-              {getEmployeesByType(employees, "intern").map((intern, i) => (
-                <span key={`intern-${i}`} title={intern.name}>
-                  {intern.image}
+            <p className="scientists">
+              {getEmployeesByType(employees, "scientist").map((employee, i) => (
+                <span key={`scientist-${i}`} title={employee.name}>
+                  {employee.image}
                 </span>
               ))}
             </p>
 
+                 {getEmployeesByType(employees, "engineer").length > 0 && (
+              <h3>Engineers</h3>
+            )}
+            <p className="engineers">
+              {getEmployeesByType(employees, "engineer").map((employee, i) => (
+                <span key={`engineer-${i}`} title={employee.name}>
+                  {employee.image}
+                </span>
+              ))}
+            </p>
+           
+               {getEmployeesByType(employees, "senior").length > 0 && (
+              <h3>Senior Employees</h3>
+            )}
+            <p className="seniors">
+              {getEmployeesByType(employees, "senior").map((employee, i) => (
+                <span key={`senior-${i}`} title={employee.name}>
+                  {employee.image}
+                </span>
+              ))}
+            </p>
             {getEmployeesByType(employees, "junior").length > 0 && (
               <h3>Junior Employees</h3>
             )}
@@ -349,13 +388,15 @@ const spinCoin = () => {
               ))}
             </p>
 
-            {getEmployeesByType(employees, "senior").length > 0 && (
-              <h3>Senior Employees</h3>
+           
+
+             {getEmployeesByType(employees, "intern").length > 0 && (
+              <h3>Interns</h3>
             )}
-            <p className="seniors">
-              {getEmployeesByType(employees, "senior").map((employee, i) => (
-                <span key={`senior-${i}`} title={employee.name}>
-                  {employee.image}
+            <p className="interns">
+              {getEmployeesByType(employees, "intern").map((intern, i) => (
+                <span key={`intern-${i}`} title={intern.name}>
+                  {intern.image}
                 </span>
               ))}
             </p>
@@ -400,6 +441,30 @@ const spinCoin = () => {
           >
             Employ senior employee
           </button>
+            <button
+            disabled={count < engineer.recruitmentCost}
+            onClick={ () => {
+              withdrawalSound.currentTime = 0;
+              withdrawalSound.play();
+              employEngineer();
+            }}
+            title={getRecruitmentButtonText(engineer)}
+          >
+            Employ engineer
+          </button>
+
+<button
+            disabled={count < scientist.recruitmentCost}
+            onClick={ () => {
+              withdrawalSound.currentTime = 0;
+              withdrawalSound.play();
+              employScientist();
+            }}
+            title={getRecruitmentButtonText(scientist)}
+          >
+            Employ scientist
+          </button>
+
           </div>
 
           <h3>Courses</h3>
