@@ -17,6 +17,10 @@ const START_TIME = Date.now();
 
 let secondsPassed = 0;
 
+setInterval(() => {
+  secondsPassed += 1;
+}, 1000);
+
 function App() {
   const [workCyclesPassed, setWorkCyclesPassed] = useState(0);
   const [eventCyclesPassed, setEventCyclesPassed] = useState(0);
@@ -62,11 +66,11 @@ function App() {
 
       setCount((prevCount) => prevCount + reward);
 
-      if (employeeMultiplier.period !== 0) {
+      if (employeeMultiplier?.period !== undefined && employeeMultiplier.period !== 0) {
         setTemporaryEmployeeMultiplier(employeeMultiplier);
       }
 
-      if (playerMultiplier.period !== 0) {
+      if (playerMultiplier?.period !== undefined && playerMultiplier.period !== 0) {
         setTemporaryPlayerMultiplier(playerMultiplier);
       }
 
@@ -142,8 +146,6 @@ function App() {
   }, [workCyclesPassed, setCount]);
 
   useEffect(() => {
-     secondsPassed += 1;
-
       if (temporaryEmployeeMultiplier?.period === 0) {
         setTemporaryEmployeeMultiplier(() => ({
           size: 1,
@@ -168,7 +170,7 @@ function App() {
         }));
       }
       
-      if (secondsPassed % EVENT_INTERVAL_SECONDS === 0) {
+      if (secondsPassed != 0 && secondsPassed % EVENT_INTERVAL_SECONDS === 0) {
         nextEvent();
       }
 
@@ -271,8 +273,9 @@ const spinCoin = () => {
               clickSound.play();
 
               setCount(
-                (count) =>
-                  count + 1 * incomeMultiplier * temporaryPlayerMultiplier.size,
+                (count) => {
+                  return count + 1 * incomeMultiplier * temporaryPlayerMultiplier.size;
+                },
               );
               setIsClicked(true);
               setTimeout(() => setIsClicked(false), 70);
