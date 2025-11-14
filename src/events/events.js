@@ -27,7 +27,7 @@ let events = {
       consequences: {
         reward: 0,
         employeeMultiplier: { size: 1, period: 0 },
-        playerMultiplier: { size: 0, period: 10 },
+        playerMultiplier: { size: 0, period: 15 },
       },
     },
     {
@@ -122,6 +122,26 @@ let events = {
         playerMultiplier: { size: 1, period: 0 },
       },
     },
+    {
+      name: "Strike action",
+      description:
+        "Your employees have gone on strike demanding better working conditions. Productivity is at a standstill until the issue is resolved.",
+      consequences: {
+        reward: 0,
+        employeeMultiplier: { size: 0, period: 30 },
+        playerMultiplier: { size: 1, period: 0 },
+      },
+    },
+    {
+      name: "The Swedish Tax Agency is coming",
+      description:
+        "The Swedish Tax Agency (Skatteverket) has been looking into your company's finances and found some discrepancies. They will fine you for every krona you make during their investigation period.",
+      consequences: {
+        reward: 0,
+        employeeMultiplier: { size: 0, period: 0 },
+        playerMultiplier: { size: -1, period: 60 },
+      },
+    }
   ],
 };
 
