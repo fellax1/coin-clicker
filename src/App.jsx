@@ -10,7 +10,7 @@ import "./App.css";
 import { Events } from "./events/events.jsx";
 import { getMilestoneEvent, getRandomEvent } from "./events/events.js";
 
-const WORK_INTERVAL_MS = 100;
+const WORK_INTERVAL_MS = 200;
 const EVENT_INTERVAL_MS = 1000;
 const EVENT_INTERVAL_SECONDS = 123;
 const START_TIME = Date.now();
@@ -132,8 +132,8 @@ function App() {
     let totalProduction = employees.reduce(
         (acc, employee) =>
           acc +
-          employee.productionRate * (1000/WORK_INTERVAL_MS) * temporaryEmployeeMultiplier.size -
-          employee.salary * (1000/WORK_INTERVAL_MS),
+          employee.productionRate * (WORK_INTERVAL_MS / 1000) * temporaryEmployeeMultiplier.size -
+          employee.salary * (WORK_INTERVAL_MS / 1000),
         0,
       );
        
@@ -167,7 +167,7 @@ function App() {
           period: prev.period - 1,
         }));
       }
-
+      
       if (secondsPassed % EVENT_INTERVAL_SECONDS === 0) {
         nextEvent();
       }
