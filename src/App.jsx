@@ -299,7 +299,7 @@ const spinCoin = () => {
             </div>
           </button>
            <ul className="stats-list">
-            <li>Income per click: <span className="bold">{(1 * incomeMultiplier).toFixed(2)} kr</span></li>
+            <li>Income per click: <span className="bold">{(1 * incomeMultiplier * temporaryPlayerMultiplier.size).toFixed(2)} kr</span></li>
             <li>
               Income per second:{" "}
               <span className="bold">{employees
