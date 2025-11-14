@@ -39,7 +39,7 @@ export const scientist = {
   type: "scientist",
   salary: 20,
   recruitmentCost: 100000,
-  productionRate: 100,
+  productionRate: 900,
   name: "Marie Curie",
   image: "👩‍🔬",
 };
