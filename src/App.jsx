@@ -262,41 +262,9 @@ const spinCoin = () => {
 
   return (
     <>
-      <h1>COIN CLICKER</h1>
       <main>
         <section className="left">
           <h2>Events</h2>
-          <Events events={events} />
-        </section>
-        <section className="middle">
-          <h2>Company</h2>
-          <p className="count">
-            <span>Current balance: </span>
-           {count.toFixed(2)} kronor</p>
-          <button
-            className={`coin-button ${isClicked ? "clicked" : ""}`}
-            onClick={() => {
-              const clickSound = new Audio("sounds/drop-coin.mp3");
-              clickSound.play();
-
-              setCount(
-                (count) => {
-                  return count + 1 * incomeMultiplier * temporaryPlayerMultiplier.size;
-                },
-              );
-              setIsClicked(true);
-              setTimeout(() => setIsClicked(false), 70);
-            }}
-          >
-            <div className={`coin3d ${isSpinning ? "spinning" : "coin"}`}>
-              <img className="front" src="img/coin-1.png" alt="Krona" />
-              <img
-                className="back"
-                src="img/coin-1-back.png"
-                alt="Krona baksida"
-              />
-            </div>
-          </button>
           <ul className="stats-list">
             <li>Income per click: <span className="bold">{(1 * incomeMultiplier).toFixed(2)} kr</span></li>
             <li>
@@ -325,6 +293,37 @@ const spinCoin = () => {
               kr</span>
             </li>
           </ul>
+          <Events events={events} />
+        </section>
+        <section className="middle">
+          <h2>Company</h2>
+          <p className="count">
+            <span>Current balance: </span>
+           {count.toFixed(2)} kronor</p>
+          <button
+            className={`coin-button ${isClicked ? "clicked" : ""}`}
+            onClick={() => {
+              const clickSound = new Audio("sounds/drop-coin.mp3");
+              clickSound.play();
+
+              setCount(
+                (count) =>
+                  count + 1 * incomeMultiplier * temporaryPlayerMultiplier.size,
+              );
+              setIsClicked(true);
+              setTimeout(() => setIsClicked(false), 70);
+            }}
+          >
+            <div className={`coin3d ${isSpinning ? "spinning" : "coin"}`}>
+              <div className={`coin-aura ${temporaryPlayerMultiplier.size === 1 && temporaryEmployeeMultiplier.size === 1 ? "" : temporaryPlayerMultiplier.size < 1 || temporaryEmployeeMultiplier.size < 1 ? "event-negative" : "event-positive" }`}></div>
+              <img className="front" src="img/coin-1.png" alt="Krona" />
+              <img
+                className="back"
+                src="img/coin-1-back.png"
+                alt="Krona baksida"
+              />
+            </div>
+          </button>
 
           <div className="employees">
             {getEmployeesByType(employees, "intern").length > 0 && (
@@ -359,12 +358,6 @@ const spinCoin = () => {
                 </span>
               ))}
             </p>
-            <p>Completed workshops: </p>
-            {completedCourses.map((courseId) => (
-              <span key={`course-${courseId}`}>
-                {courses.find((c) => c.id === courseId)?.name}
-              </span>
-            ))}
           </div>
         </section>
         <section className="right">
@@ -406,24 +399,30 @@ const spinCoin = () => {
           </button>
 
           <p>Courses:</p>
-          {courses.map((course) => (
-            <button
-              key={course.id}
-              disabled={
-                count < course.cost ||
-                completedCourses.length >= courses.length ||
-                completedCourses.includes(course.id)
-              }
-              onClick={() => {
-                spinningCoinSound.play();
-                takeCourse(course);
-                spinCoin();
-              }}
-              title={`${course.description} (Cost: ${course.cost} kr)`}
-            >
-              {course.name}
-            </button>
-          ))}
+          {courses.map((course) => {
+            const isCompleted = completedCourses.includes(course.id);
+            return (
+            <div key={course.id}>
+              <button
+                key={course.id}
+                disabled={
+                  count < course.cost ||
+                  completedCourses.length >= courses.length ||
+                  isCompleted
+                }
+                onClick={() => {
+                  spinningCoinSound.play();
+                  takeCourse(course);
+                  spinCoin();
+                }}
+                title={`${course.description} (Cost: ${course.cost} kr)`}
+              >
+                {course.name}
+              </button>
+              {isCompleted && <span style={{ marginLeft: 16 }}>✅</span>}
+            </div>
+            );
+          })}
           {completedCourses.length === courses.length && (
             <p>All courses completed!</p>
           )}
