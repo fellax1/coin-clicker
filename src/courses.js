@@ -30,7 +30,7 @@ export const courses = [
   {
     id: 5,
     name: "Executive Training",
-    cost: 100_000,
+    cost: 2_000_000,
     multiplierIncrease: 25,
     description: "Increases income per click by 2500%",
   },
