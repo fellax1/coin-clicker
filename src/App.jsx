@@ -10,6 +10,10 @@ import "./App.css";
 import { Events } from "./events/events.jsx";
 import { getMilestoneEvent, getRandomEvent } from "./events/events.js";
 
+const clickSound = new Audio("sounds/click.mp3");
+const withdrawalSound = new Audio("sounds/cash.wav");
+const spinningCoinSound = new Audio("sounds/spinning-coin.mp3");
+
 const WORK_INTERVAL_MS = 200;
 const EVENT_INTERVAL_MS = 1000;
 const EVENT_INTERVAL_SECONDS = 123;
@@ -49,9 +53,7 @@ function App() {
   const [isClicked, setIsClicked] = useState(false);
   const [isSpinning, setIsSpinning] = useState(false);
 
-  const clickSound = new Audio("sounds/click.mp3");
-  const withdrawalSound = new Audio("sounds/cash.wav");
-  const spinningCoinSound = new Audio("sounds/spinning-coin.mp3");
+  
   const [milestones, setMilestones] = useState({
     oneThousand: null,
     tenThousand: null,
@@ -378,6 +380,7 @@ const spinCoin = () => {
           <button
             disabled={count < juniorEmployee.recruitmentCost}
             onClick={() => {
+              withdrawalSound.currentTime = 0;
               withdrawalSound.play();
               employJunior();
             }}
@@ -388,8 +391,9 @@ const spinCoin = () => {
           <button
             disabled={count < seniorEmployee.recruitmentCost}
             onClick={ () => {
-              employSenior();
+              withdrawalSound.currentTime = 0;
               withdrawalSound.play();
+              employSenior();
             }}
             title={getRecruitmentButtonText(seniorEmployee)}
           >
@@ -409,6 +413,7 @@ const spinCoin = () => {
                   isCompleted
                 }
                 onClick={() => {
+                  spinningCoinSound.currentTime = 0;
                   spinningCoinSound.play();
                   takeCourse(course);
                   spinCoin();
