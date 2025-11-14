@@ -18,6 +18,7 @@ const START_TIME = Date.now();
 const MAX_INTERNS = 10;
 
 let secondsPassed = 0;
+let lastEventUpdate = 0;
 
 setInterval(() => {
   secondsPassed += 1;
@@ -172,8 +173,9 @@ function App() {
         }));
       }
       
-      if (secondsPassed != 0 && secondsPassed % EVENT_INTERVAL_SECONDS === 0) {
+      if (secondsPassed != 0 && secondsPassed % EVENT_INTERVAL_SECONDS === 0 && lastEventUpdate !== secondsPassed) {
         nextEvent();
+        lastEventUpdate = secondsPassed;
       }
 
       updateMilestones();
