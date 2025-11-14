@@ -3,7 +3,7 @@ import "./events.css";
 export function Events({ events }) {
   return (
     <ul className="events">
-      {events.map((event, index) => {
+      {[...events].reverse().map((event, index) => {
         const reward = event.consequences?.reward ?? 0;
         return (
           <li className="event" key={index}>
