@@ -248,7 +248,9 @@ const spinCoin = () => {
         </section>
         <section className="middle">
           <h2>Company</h2>
-          <p className="count">Current balance: {count.toFixed(2)} kronor</p>
+          <p className="count">
+            <span>Current balance: </span>
+           {count.toFixed(2)} kronor</p>
           <button
             className={`coin-button ${isClicked ? "clicked" : ""}`}
             onClick={() => {
@@ -272,32 +274,32 @@ const spinCoin = () => {
               />
             </div>
           </button>
-          <ul>
-            <li>Income per click: {(1 * incomeMultiplier).toFixed(2)} kr</li>
+          <ul className="stats-list">
+            <li>Income per click: <span className="bold">{(1 * incomeMultiplier).toFixed(2)} kr</span></li>
             <li>
               Income per second:{" "}
-              {employees
+              <span className="bold">{employees
                 .reduce((acc, employee) => acc + employee.productionRate, 0)
                 .toFixed(2)}{" "}
-              kr
+              kr</span>
             </li>
             <li>
               Expenses per second:{" "}
-              {employees
+              <span className="bold">{employees
                 .reduce((acc, employee) => acc + employee.salary, 0)
                 .toFixed(2)}{" "}
-              kr
+              kr</span>
             </li>
             <li>
               Net income per second:{" "}
-              {(
+              <span className="bold">{(
                 employees.reduce(
                   (acc, employee) => acc + employee.productionRate,
                   0,
                 ) -
                 employees.reduce((acc, employee) => acc + employee.salary, 0)
               ).toFixed(2)}{" "}
-              kr
+              kr</span>
             </li>
           </ul>
 

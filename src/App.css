@@ -2,6 +2,7 @@
    v2.0 | 20110126
    License: none (public domain)
 */
+@import url('https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,200..900;1,200..900&display=swap');
 
 html,
 body,
@@ -130,6 +131,11 @@ table {
 
 body {
   display: block !important;
+  font-family: "Source Sans 3", sans-serif;
+}
+
+.bold {
+  font-weight: 700;
 }
 
 #root {
@@ -160,7 +166,15 @@ main {
 }
 
 .count {
+  display: block;
+  font-size: 28px;
   font-variant-numeric: tabular-nums;
+  text-align: center;
+}
+
+.count span {
+  display: block;
+  margin-bottom: 10px;
 }
 
 .coin-button {
@@ -218,6 +232,11 @@ main {
   backface-visibility: hidden; 
 }
 
+.stats-list {
+  gap: 8px;
+  display: flex;
+  flex-direction: column;
+}
 
 .coin3d .back {
   transform: rotateY(180deg);
