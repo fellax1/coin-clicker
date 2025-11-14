@@ -191,7 +191,20 @@ section > h2 {
   width: 100%;
   padding: 1rem;
   background-color: #666;
-  color: white
+  color: white;
+
+  .positive {
+    color: #4fd868;
+  }
+
+  .negative {
+    color: #f86d6d;
+  }
+
+  .divider {
+    display: inline-block;
+    margin: 0 1rem;
+  }
 }
 
 .count {

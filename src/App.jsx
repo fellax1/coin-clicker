@@ -434,10 +434,15 @@ const spinCoin = () => {
         </section>
       </main>
       <footer className="footer">
+        <span className={getMultiplierClass(temporaryPlayerMultiplier.size)}>
         Temporary player multiplier: x{temporaryPlayerMultiplier.size} (
-        {temporaryPlayerMultiplier.period} s left) | Temporary employee
-        multiplier: x{temporaryEmployeeMultiplier.size} (
+        {temporaryPlayerMultiplier.period} s left) 
+        </span>
+        <span className="divider">|</span> 
+        <span className={getMultiplierClass(temporaryEmployeeMultiplier.size)}>
+        Temporary employee multiplier: x{temporaryEmployeeMultiplier.size} (
         {temporaryEmployeeMultiplier.period} s left)
+        </span>
       </footer>
     </>
   );
@@ -449,6 +454,16 @@ function getEmployeesByType(employees, type) {
 
 function getRecruitmentButtonText(employee) {
   return `Each ${employee.type} costs ${employee.recruitmentCost} kr in recruitment fee, has a salary of ${employee.salary} kr per second and produces ${employee.productionRate} kr every second`;
+}
+
+function getMultiplierClass(multiplier) {
+  if (multiplier > 1) {
+    return "positive";
+  } else if (multiplier < 1) {
+    return "negative";
+  } else {
+    return "";
+  }
 }
 
 export default App;
