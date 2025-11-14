@@ -144,7 +144,6 @@ body {
 }
 
 main {
-  background: lime;
   display: flex;
   gap: 1rem;
   padding: 16px 0;
