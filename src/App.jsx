@@ -127,7 +127,7 @@ function App() {
   }, [count, employees, milestones]);
 
   const nextEvent = useCallback(() => {
-    const tier = employees.length < 10 ? "tierOne" : count < 1000000 ? "tierTwo" : "tierThree";
+    const tier = employees.length < 50 ? "tierOne" : count < 1000000 ? "tierTwo" : "tierThree";
     const newEvent = getRandomEvent(tier);
 
     if (newEvent) {
