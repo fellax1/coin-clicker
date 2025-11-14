@@ -363,7 +363,8 @@ const spinCoin = () => {
         </section>
         <section className="right">
           <h2>Store</h2>
-          <p>Workers:</p>
+          <h3>Workers</h3>
+          <div className="store-buttons">
             <button
               onClick={ () =>{
                clickSound.play();
@@ -399,12 +400,13 @@ const spinCoin = () => {
           >
             Employ senior employee
           </button>
+          </div>
 
-          <p>Courses:</p>
+          <h3>Courses</h3>
+          <div className="store-buttons">
           {courses.map((course) => {
             const isCompleted = completedCourses.includes(course.id);
             return (
-            <div key={course.id}>
               <button
                 key={course.id}
                 disabled={
@@ -421,17 +423,17 @@ const spinCoin = () => {
                 title={`${course.description} (Cost: ${course.cost} kr)`}
               >
                 {course.name}
-              </button>
               {isCompleted && <span style={{ marginLeft: 16 }}>✅</span>}
-            </div>
+              </button>
             );
           })}
+          </div>
           {completedCourses.length === courses.length && (
             <p>All courses completed!</p>
           )}
         </section>
       </main>
-      <footer>
+      <footer className="footer">
         Temporary player multiplier: x{temporaryPlayerMultiplier.size} (
         {temporaryPlayerMultiplier.period} s left) | Temporary employee
         multiplier: x{temporaryEmployeeMultiplier.size} (
