@@ -141,7 +141,7 @@ let events = {
         employeeMultiplier: { size: 0, period: 0 },
         playerMultiplier: { size: -1, period: 60 },
       },
-    }
+    },
   ],
 };
 

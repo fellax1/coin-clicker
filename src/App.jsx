@@ -55,7 +55,6 @@ function App() {
   const [isClicked, setIsClicked] = useState(false);
   const [isSpinning, setIsSpinning] = useState(false);
 
-  
   const [milestones, setMilestones] = useState({
     oneThousand: null,
     tenThousand: null,
@@ -69,19 +68,28 @@ function App() {
 
   const handleEvent = (newEvent) => {
     const { reward, employeeMultiplier, playerMultiplier } =
-        newEvent.consequences;
+      newEvent.consequences;
 
-      setCount((prevCount) => prevCount + reward);
+    setCount((prevCount) => prevCount + reward);
 
-      if (employeeMultiplier?.period !== undefined && employeeMultiplier.period !== 0) {
-        setTemporaryEmployeeMultiplier(employeeMultiplier);
-      }
+    if (
+      employeeMultiplier?.period !== undefined &&
+      employeeMultiplier.period !== 0
+    ) {
+      setTemporaryEmployeeMultiplier(employeeMultiplier);
+    }
 
-      if (playerMultiplier?.period !== undefined && playerMultiplier.period !== 0) {
-        setTemporaryPlayerMultiplier(playerMultiplier);
-      }
+    if (
+      playerMultiplier?.period !== undefined &&
+      playerMultiplier.period !== 0
+    ) {
+      setTemporaryPlayerMultiplier(playerMultiplier);
+    }
 
-      setEvents((prevEvents) => [...prevEvents, {...newEvent, timestamp: Date.now()}]);
+    setEvents((prevEvents) => [
+      ...prevEvents,
+      { ...newEvent, timestamp: Date.now() },
+    ]);
   };
 
   const updateMilestones = useCallback(() => {
@@ -122,16 +130,21 @@ function App() {
     }
 
     if (balanceEvent) {
-      handleEvent({...balanceEvent, secondsPassed});
+      handleEvent({ ...balanceEvent, secondsPassed });
     }
 
     if (employerEvent) {
-      handleEvent({...employerEvent, secondsPassed});
+      handleEvent({ ...employerEvent, secondsPassed });
     }
   }, [count, employees, milestones]);
 
   const nextEvent = useCallback(() => {
-    const tier = employees.length < 50 ? "tierOne" : count < 1000000 ? "tierTwo" : "tierThree";
+    const tier =
+      employees.length < 50
+        ? "tierOne"
+        : count < 1000000
+          ? "tierTwo"
+          : "tierThree";
     const newEvent = getRandomEvent(tier);
 
     if (newEvent) {
@@ -141,49 +154,55 @@ function App() {
 
   useEffect(() => {
     let totalProduction = employees.reduce(
-        (acc, employee) =>
-          acc +
-          employee.productionRate * (WORK_INTERVAL_MS / 1000) * temporaryEmployeeMultiplier.size -
-          employee.salary * (WORK_INTERVAL_MS / 1000),
-        0,
-      );
-       
-      setCount((prevCount) => prevCount + totalProduction);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+      (acc, employee) =>
+        acc +
+        employee.productionRate *
+          (WORK_INTERVAL_MS / 1000) *
+          temporaryEmployeeMultiplier.size -
+        employee.salary * (WORK_INTERVAL_MS / 1000),
+      0,
+    );
+
+    setCount((prevCount) => prevCount + totalProduction);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [workCyclesPassed, setCount]);
 
   useEffect(() => {
-      if (temporaryEmployeeMultiplier?.period === 0) {
-        setTemporaryEmployeeMultiplier(() => ({
-          size: 1,
-          period: 0,
-        }));
-      } else if (temporaryEmployeeMultiplier?.period > 0) {
-        setTemporaryEmployeeMultiplier((prev) => ({
-          size: prev.size,
-          period: prev.period - 1,
-        }));
-      }
+    if (temporaryEmployeeMultiplier?.period === 0) {
+      setTemporaryEmployeeMultiplier(() => ({
+        size: 1,
+        period: 0,
+      }));
+    } else if (temporaryEmployeeMultiplier?.period > 0) {
+      setTemporaryEmployeeMultiplier((prev) => ({
+        size: prev.size,
+        period: prev.period - 1,
+      }));
+    }
 
-      if (temporaryPlayerMultiplier?.period === 0) {
-        setTemporaryPlayerMultiplier(() => ({
-          size: 1,
-          period: 0,
-        }));
-      } else if (temporaryPlayerMultiplier?.period > 0) {
-        setTemporaryPlayerMultiplier((prev) => ({
-          size: prev.size,
-          period: prev.period - 1,
-        }));
-      }
-      
-      if (secondsPassed != 0 && secondsPassed % EVENT_INTERVAL_SECONDS === 0 && lastEventUpdate !== secondsPassed) {
-        nextEvent();
-        lastEventUpdate = secondsPassed;
-      }
+    if (temporaryPlayerMultiplier?.period === 0) {
+      setTemporaryPlayerMultiplier(() => ({
+        size: 1,
+        period: 0,
+      }));
+    } else if (temporaryPlayerMultiplier?.period > 0) {
+      setTemporaryPlayerMultiplier((prev) => ({
+        size: prev.size,
+        period: prev.period - 1,
+      }));
+    }
 
-      updateMilestones();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    if (
+      secondsPassed != 0 &&
+      secondsPassed % EVENT_INTERVAL_SECONDS === 0 &&
+      lastEventUpdate !== secondsPassed
+    ) {
+      nextEvent();
+      lastEventUpdate = secondsPassed;
+    }
+
+    updateMilestones();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [eventCyclesPassed]);
 
   useEffect(() => {
@@ -201,10 +220,7 @@ function App() {
       clearInterval(interval);
       clearInterval(eventInterval);
     };
-  }, [
-    setWorkCyclesPassed,
-    setEventCyclesPassed,
-  ]);
+  }, [setWorkCyclesPassed, setEventCyclesPassed]);
 
   useEffect(() => {
     const handleKeyDown = (event) => {
@@ -229,7 +245,9 @@ function App() {
     }
     const nextIntern = availableInterns.pop() ?? { ...intern };
     setEmployees((prevState) => [...prevState, nextIntern]);
-    setIncomeMultiplier((prevCount) => prevCount * nextIntern.tutoringCostMultiplier);
+    setIncomeMultiplier(
+      (prevCount) => prevCount * nextIntern.tutoringCostMultiplier,
+    );
   };
 
   const employJunior = () => {
@@ -254,7 +272,7 @@ function App() {
     }
     setCount((prevCount) => prevCount - engineer.recruitmentCost);
     setEmployees((prevState) => [...prevState, { ...engineer }]);
-  }
+  };
 
   const employScientist = () => {
     if (count < scientist.recruitmentCost) {
@@ -262,7 +280,7 @@ function App() {
     }
     setCount((prevCount) => prevCount - scientist.recruitmentCost);
     setEmployees((prevState) => [...prevState, { ...scientist }]);
-  }
+  };
 
   const takeCourse = (course) => {
     setIncomeMultiplier((prevCount) => prevCount * course.multiplierIncrease);
@@ -270,15 +288,15 @@ function App() {
     setCompletedCourses((prevCompleted) => [...prevCompleted, course.id]);
   };
 
-const spinCoin = () => {
-  setIsSpinning(false);
+  const spinCoin = () => {
+    setIsSpinning(false);
 
-  setTimeout(() => {
-    setIsSpinning(true);
+    setTimeout(() => {
+      setIsSpinning(true);
 
-    setTimeout(() => setIsSpinning(false), 2000);
-  }, 20);
-};
+      setTimeout(() => setIsSpinning(false), 2000);
+    }, 20);
+  };
 
   return (
     <>
@@ -291,7 +309,8 @@ const spinCoin = () => {
           <h2>Company</h2>
           <p className="count">
             <span>Current balance: </span>
-           {count.toFixed(2)} kronor</p>
+            {count.toFixed(2)} kronor
+          </p>
           <button
             className={`coin-button ${isClicked ? "clicked" : ""}`}
             onClick={() => {
@@ -307,7 +326,9 @@ const spinCoin = () => {
             }}
           >
             <div className={`coin3d ${isSpinning ? "spinning" : "coin"}`}>
-              <div className={`coin-aura ${temporaryPlayerMultiplier.size === 1 && temporaryEmployeeMultiplier.size === 1 ? "" : temporaryPlayerMultiplier.size < 1 || temporaryEmployeeMultiplier.size < 1 ? "event-negative" : "event-positive" }`}></div>
+              <div
+                className={`coin-aura ${temporaryPlayerMultiplier.size === 1 && temporaryEmployeeMultiplier.size === 1 ? "" : temporaryPlayerMultiplier.size < 1 || temporaryEmployeeMultiplier.size < 1 ? "event-negative" : "event-positive"}`}
+              ></div>
               <img className="front" src="img/coin-1.png" alt="Krona" />
               <img
                 className="back"
@@ -316,81 +337,112 @@ const spinCoin = () => {
               />
             </div>
           </button>
-           <ul className="stats-list">
-            <li>Income per click: <span className="bold">{(1 * incomeMultiplier * temporaryPlayerMultiplier.size).toFixed(2)} kr</span></li>
+          <ul className="stats-list">
+            <li>
+              Income per click:{" "}
+              <span className="bold">
+                {(
+                  1 *
+                  incomeMultiplier *
+                  temporaryPlayerMultiplier.size
+                ).toFixed(2)}{" "}
+                kr
+              </span>
+            </li>
             <li>
               Income per second:{" "}
-              <span className="bold">{employees
-                .reduce((acc, employee) => acc + employee.productionRate, 0)
-                .toFixed(2)}{" "}
-              kr</span>
+              <span className="bold">
+                {employees
+                  .reduce((acc, employee) => acc + employee.productionRate, 0)
+                  .toFixed(2)}{" "}
+                kr
+              </span>
             </li>
             <li>
               Expenses per second:{" "}
-              <span className="bold">{employees
-                .reduce((acc, employee) => acc + employee.salary, 0)
-                .toFixed(2)}{" "}
-              kr</span>
+              <span className="bold">
+                {employees
+                  .reduce((acc, employee) => acc + employee.salary, 0)
+                  .toFixed(2)}{" "}
+                kr
+              </span>
             </li>
             <li>
               Net income per second:{" "}
-              <span className="bold">{(
-                employees.reduce(
-                  (acc, employee) => acc + employee.productionRate,
-                  0,
-                ) -
-                employees.reduce((acc, employee) => acc + employee.salary, 0)
-              ).toFixed(2)}{" "}
-              kr</span>
+              <span className="bold">
+                {(
+                  employees.reduce(
+                    (acc, employee) => acc + employee.productionRate,
+                    0,
+                  ) -
+                  employees.reduce((acc, employee) => acc + employee.salary, 0)
+                ).toFixed(2)}{" "}
+                kr
+              </span>
             </li>
           </ul>
           <div className="employees">
-              {getEmployeesByType(employees, "scientist").length > 0 && (
-              <h3>Scientists</h3>
+            {getEmployeesByType(employees, "scientist").length > 0 && (
+              <>
+                <h3>Scientists</h3>
+                <p className="scientists">
+                  {getEmployeesByType(employees, "scientist").map(
+                    (employee, i) => (
+                      <span key={`scientist-${i}`} title={employee.name}>
+                        {employee.image}
+                      </span>
+                    ),
+                  )}
+                </p>
+              </>
             )}
-            <p className="scientists">
-              {getEmployeesByType(employees, "scientist").map((employee, i) => (
-                <span key={`scientist-${i}`} title={employee.name}>
-                  {employee.image}
-                </span>
-              ))}
-            </p>
 
-                 {getEmployeesByType(employees, "engineer").length > 0 && (
-              <h3>Engineers</h3>
+            {getEmployeesByType(employees, "engineer").length > 0 && (
+              <>
+                <h3>Engineers</h3>
+                <p className="engineers">
+                  {getEmployeesByType(employees, "engineer").map(
+                    (employee, i) => (
+                      <span key={`engineer-${i}`} title={employee.name}>
+                        {employee.image}
+                      </span>
+                    ),
+                  )}
+                </p>
+              </>
             )}
-            <p className="engineers">
-              {getEmployeesByType(employees, "engineer").map((employee, i) => (
-                <span key={`engineer-${i}`} title={employee.name}>
-                  {employee.image}
-                </span>
-              ))}
-            </p>
-           
-               {getEmployeesByType(employees, "senior").length > 0 && (
-              <h3>Senior Employees</h3>
+
+            {getEmployeesByType(employees, "senior").length > 0 && (
+              <>
+                <h3>Senior Employees</h3>
+                <p className="seniors">
+                  {getEmployeesByType(employees, "senior").map(
+                    (employee, i) => (
+                      <span key={`senior-${i}`} title={employee.name}>
+                        {employee.image}
+                      </span>
+                    ),
+                  )}
+                </p>
+              </>
             )}
-            <p className="seniors">
-              {getEmployeesByType(employees, "senior").map((employee, i) => (
-                <span key={`senior-${i}`} title={employee.name}>
-                  {employee.image}
-                </span>
-              ))}
-            </p>
+
             {getEmployeesByType(employees, "junior").length > 0 && (
-              <h3>Junior Employees</h3>
+              <>
+                <h3>Junior Employees</h3>
+                <p className="juniors">
+                  {getEmployeesByType(employees, "junior").map(
+                    (employee, i) => (
+                      <span key={`junior-${i}`} title={employee.name}>
+                        {employee.image}
+                      </span>
+                    ),
+                  )}
+                </p>
+              </>
             )}
-            <p className="juniors">
-              {getEmployeesByType(employees, "junior").map((employee, i) => (
-                <span key={`junior-${i}`} title={employee.name}>
-                  {employee.image}
-                </span>
-              ))}
-            </p>
 
-           
-
-             {getEmployeesByType(employees, "intern").length > 0 && (
+            {getEmployeesByType(employees, "intern").length > 0 && (
               <h3>Interns</h3>
             )}
             <p className="interns">
@@ -407,11 +459,13 @@ const spinCoin = () => {
           <h3>Workers</h3>
           <div className="store-buttons">
             <button
-              onClick={ () =>{
-               clickSound.play();
+              onClick={() => {
+                clickSound.play();
                 employIntern();
               }}
-              disabled={getEmployeesByType(employees, "intern").length >= MAX_INTERNS}
+              disabled={
+                getEmployeesByType(employees, "intern").length >= MAX_INTERNS
+              }
               title={
                 getRecruitmentButtonText(intern) +
                 `. Each intern reduces your own productivity by ${100 - intern.tutoringCostMultiplier * 100}%. You can employ up to ${MAX_INTERNS} interns.`
@@ -419,79 +473,78 @@ const spinCoin = () => {
             >
               Employ intern
             </button>
-          <button
-            disabled={count < juniorEmployee.recruitmentCost}
-            onClick={() => {
-              withdrawalSound.currentTime = 0;
-              withdrawalSound.play();
-              employJunior();
-            }}
-            title={getRecruitmentButtonText(juniorEmployee)}
-          >
-            Employ junior employee
-          </button>
-          <button
-            disabled={count < seniorEmployee.recruitmentCost}
-            onClick={ () => {
-              withdrawalSound.currentTime = 0;
-              withdrawalSound.play();
-              employSenior();
-            }}
-            title={getRecruitmentButtonText(seniorEmployee)}
-          >
-            Employ senior employee
-          </button>
             <button
-            disabled={count < engineer.recruitmentCost}
-            onClick={ () => {
-              withdrawalSound.currentTime = 0;
-              withdrawalSound.play();
-              employEngineer();
-            }}
-            title={getRecruitmentButtonText(engineer)}
-          >
-            Employ engineer
-          </button>
+              disabled={count < juniorEmployee.recruitmentCost}
+              onClick={() => {
+                withdrawalSound.currentTime = 0;
+                withdrawalSound.play();
+                employJunior();
+              }}
+              title={getRecruitmentButtonText(juniorEmployee)}
+            >
+              Employ junior employee
+            </button>
+            <button
+              disabled={count < seniorEmployee.recruitmentCost}
+              onClick={() => {
+                withdrawalSound.currentTime = 0;
+                withdrawalSound.play();
+                employSenior();
+              }}
+              title={getRecruitmentButtonText(seniorEmployee)}
+            >
+              Employ senior employee
+            </button>
+            <button
+              disabled={count < engineer.recruitmentCost}
+              onClick={() => {
+                withdrawalSound.currentTime = 0;
+                withdrawalSound.play();
+                employEngineer();
+              }}
+              title={getRecruitmentButtonText(engineer)}
+            >
+              Employ engineer
+            </button>
 
-<button
-            disabled={count < scientist.recruitmentCost}
-            onClick={ () => {
-              withdrawalSound.currentTime = 0;
-              withdrawalSound.play();
-              employScientist();
-            }}
-            title={getRecruitmentButtonText(scientist)}
-          >
-            Employ scientist
-          </button>
-
+            <button
+              disabled={count < scientist.recruitmentCost}
+              onClick={() => {
+                withdrawalSound.currentTime = 0;
+                withdrawalSound.play();
+                employScientist();
+              }}
+              title={getRecruitmentButtonText(scientist)}
+            >
+              Employ scientist
+            </button>
           </div>
 
           <h3>Courses</h3>
           <div className="store-buttons">
-          {courses.map((course) => {
-            const isCompleted = completedCourses.includes(course.id);
-            return (
-              <button
-                key={course.id}
-                disabled={
-                  count < course.cost ||
-                  completedCourses.length >= courses.length ||
-                  isCompleted
-                }
-                onClick={() => {
-                  spinningCoinSound.currentTime = 0;
-                  spinningCoinSound.play();
-                  takeCourse(course);
-                  spinCoin();
-                }}
-                title={`${course.description} (Cost: ${course.cost} kr)`}
-              >
-                {course.name}
-              {isCompleted && <span style={{ marginLeft: 16 }}>✅</span>}
-              </button>
-            );
-          })}
+            {courses.map((course) => {
+              const isCompleted = completedCourses.includes(course.id);
+              return (
+                <button
+                  key={course.id}
+                  disabled={
+                    count < course.cost ||
+                    completedCourses.length >= courses.length ||
+                    isCompleted
+                  }
+                  onClick={() => {
+                    spinningCoinSound.currentTime = 0;
+                    spinningCoinSound.play();
+                    takeCourse(course);
+                    spinCoin();
+                  }}
+                  title={`${course.description} (Cost: ${course.cost} kr)`}
+                >
+                  {course.name}
+                  {isCompleted && <span style={{ marginLeft: 16 }}>✅</span>}
+                </button>
+              );
+            })}
           </div>
           {completedCourses.length === courses.length && (
             <p>All courses completed!</p>
@@ -500,13 +553,13 @@ const spinCoin = () => {
       </main>
       <footer className="footer">
         <span className={getMultiplierClass(temporaryPlayerMultiplier.size)}>
-        Temporary player multiplier: x{temporaryPlayerMultiplier.size} (
-        {temporaryPlayerMultiplier.period} s left) 
+          Temporary player multiplier: x{temporaryPlayerMultiplier.size} (
+          {temporaryPlayerMultiplier.period} s left)
         </span>
-        <span className="divider">|</span> 
+        <span className="divider">|</span>
         <span className={getMultiplierClass(temporaryEmployeeMultiplier.size)}>
-        Temporary employee multiplier: x{temporaryEmployeeMultiplier.size} (
-        {temporaryEmployeeMultiplier.period} s left)
+          Temporary employee multiplier: x{temporaryEmployeeMultiplier.size} (
+          {temporaryEmployeeMultiplier.period} s left)
         </span>
       </footer>
     </>
