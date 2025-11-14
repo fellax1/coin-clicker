@@ -206,8 +206,8 @@ export function getMilestoneEvent(milestone) {
     case "tenEmployees":
       return {
         ...baseEvent,
-        name: "Milestone reached: 10 employees 🏆",
-        description: `Congratulations! You have hired 10 employees. Enjoy a 1.5x productivity boost for 30 seconds as a reward! Stay productive!`,
+        name: "Milestone reached: 50 employees 🏆",
+        description: `Congratulations! You have hired 50 employees. Enjoy a 1.5x productivity boost for 30 seconds as a reward! Stay productive!`,
         consequences: {
           ...baseEvent.consequences,
           employeeMultiplier: { size: 1.5, period: 30 },

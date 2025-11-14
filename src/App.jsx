@@ -15,6 +15,8 @@ const EVENT_INTERVAL_MS = 1000;
 const EVENT_INTERVAL_SECONDS = 123;
 const START_TIME = Date.now();
 
+const MAX_INTERNS = 10;
+
 let secondsPassed = 0;
 
 setInterval(() => {
@@ -216,6 +218,9 @@ function App() {
   }, [nextEvent]);
 
   const employIntern = () => {
+    if (employees.filter((e) => e.type === "intern").length >= MAX_INTERNS) {
+      return;
+    }
     const nextIntern = availableInterns.pop() ?? { ...intern };
     setEmployees((prevState) => [...prevState, nextIntern]);
     setIncomeMultiplier((prevCount) => prevCount * nextIntern.tutoringCostMultiplier);
@@ -371,7 +376,7 @@ const spinCoin = () => {
               }}
               title={
                 getRecruitmentButtonText(intern) +
-                `. Each intern reduces your own productivity by ${100 - intern.tutoringCostMultiplier * 100}%."`
+                `. Each intern reduces your own productivity by ${100 - intern.tutoringCostMultiplier * 100}%. You can employ up to ${MAX_INTERNS} interns.`
               }
             >
               Employ intern
