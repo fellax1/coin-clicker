@@ -182,7 +182,7 @@ function App() {
 
       updateMilestones();
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [eventCyclesPassed, nextEvent, updateMilestones]);
+  }, [eventCyclesPassed]);
 
   useEffect(() => {
     // Work timer
