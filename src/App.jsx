@@ -100,7 +100,7 @@ function App() {
       balanceEvent = getMilestoneEvent("oneBillion", secondsPassed);
     }
 
-    if (employees.length >= 10 && !milestones.fiftyEmployees) {
+    if (employees.length >= 50 && !milestones.fiftyEmployees) {
       setMilestones((prev) => ({ ...prev, fiftyEmployees: secondsPassed }));
       employerEvent = getMilestoneEvent("fiftyEmployees", secondsPassed);
     } else if (employees.length >= 100 && !milestones.oneHundredEmployees) {
