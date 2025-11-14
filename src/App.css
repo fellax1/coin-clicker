@@ -212,13 +212,12 @@ main {
   font-size: 3rem;
 }
 
-
 .coin3d {
   position: relative;
   width: 300px;
   height: 300px;
   transform-style: preserve-3d;
-  perspective: 2000px; 
+  perspective: 2000px;
   margin: 0 auto;
 }
 
@@ -229,7 +228,7 @@ main {
   left: 0;
   top: 0;
   border-radius: 50%;
-  backface-visibility: hidden; 
+  backface-visibility: hidden;
 }
 
 .stats-list {
@@ -252,11 +251,10 @@ main {
   }
 
   80% {
-    transform: rotateY(1000deg); 
+    transform: rotateY(1000deg);
   }
 
   100% {
-    transform: rotateY(1080deg); 
+    transform: rotateY(1080deg);
   }
 }
-

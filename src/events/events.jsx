@@ -10,14 +10,14 @@ export function Events({ events }) {
             <p>{new Date(event.timestamp).toLocaleTimeString()}</p>
             <h3>
               {event.name}
-              {event.secondsPassed &&
+              {event.secondsPassed && (
                 <>
-                <br />
-                <span className="seconds-passed">
-                  After {event.secondsPassed} seconds of gameplay
-                </span>
+                  <br />
+                  <span className="seconds-passed">
+                    After {event.secondsPassed} seconds of gameplay
+                  </span>
                 </>
-              }
+              )}
             </h3>
             <p>
               {event.description}{" "}

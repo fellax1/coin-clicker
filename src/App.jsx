@@ -10,12 +10,17 @@ import "./App.css";
 import { Events } from "./events/events.jsx";
 import { getMilestoneEvent, getRandomEvent } from "./events/events.js";
 
-const EVENT_INTERVAL_SECONDS = 180;
+const WORK_INTERVAL_MS = 100;
+const EVENT_INTERVAL_MS = 1000;
+const EVENT_INTERVAL_SECONDS = 123;
 const START_TIME = Date.now();
 
 let secondsPassed = 0;
 
 function App() {
+  const [workCyclesPassed, setWorkCyclesPassed] = useState(0);
+  const [eventCyclesPassed, setEventCyclesPassed] = useState(0);
+
   const [count, setCount] = useState(0);
   const [employees, setEmployees] = useState([]);
   const [events, setEvents] = useState([
@@ -124,21 +129,20 @@ function App() {
   }, [employees, count]);
 
   useEffect(() => {
-    // Work timer
-    const interval = setInterval(() => {
-      let totalProduction = employees.reduce(
+    let totalProduction = employees.reduce(
         (acc, employee) =>
           acc +
-          employee.productionRate * 0.1 * temporaryEmployeeMultiplier.size -
-          employee.salary * 0.1,
+          employee.productionRate * (1000/WORK_INTERVAL_MS) * temporaryEmployeeMultiplier.size -
+          employee.salary * (1000/WORK_INTERVAL_MS),
         0,
       );
+       
       setCount((prevCount) => prevCount + totalProduction);
-    }, 100);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [workCyclesPassed, setCount]);
 
-    // Event timer
-    const eventInterval = setInterval(() => {
-      secondsPassed += 1;
+  useEffect(() => {
+     secondsPassed += 1;
 
       if (temporaryEmployeeMultiplier?.period === 0) {
         setTemporaryEmployeeMultiplier(() => ({
@@ -169,18 +173,27 @@ function App() {
       }
 
       updateMilestones();
-    }, 1000);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [eventCyclesPassed, nextEvent, updateMilestones]);
+
+  useEffect(() => {
+    // Work timer
+    const interval = setInterval(() => {
+      setWorkCyclesPassed((prev) => prev + 1);
+    }, WORK_INTERVAL_MS);
+
+    // Event timer
+    const eventInterval = setInterval(() => {
+      setEventCyclesPassed((prev) => prev + 1);
+    }, EVENT_INTERVAL_MS);
 
     return () => {
       clearInterval(interval);
       clearInterval(eventInterval);
     };
   }, [
-    employees,
-    temporaryEmployeeMultiplier,
-    temporaryPlayerMultiplier,
-    nextEvent,
-    updateMilestones,
+    setWorkCyclesPassed,
+    setEventCyclesPassed,
   ]);
 
   useEffect(() => {
