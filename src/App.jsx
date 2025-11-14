@@ -8,9 +8,10 @@ import {
 } from "./employees";
 import "./App.css";
 import { Events } from "./events/events.jsx";
-import { getRandomEvent } from "./events/events.js";
+import { getMilestoneEvent, getRandomEvent } from "./events/events.js";
 
 const EVENT_INTERVAL_SECONDS = 180;
+const START_TIME = Date.now();
 
 let secondsPassed = 0;
 
@@ -22,6 +23,7 @@ function App() {
       name: "Welcome to Coin Clicker!",
       description:
         "You have just started your coin clicking company. Get to work, and use your earnings to grow your business. Employ workers and take courses to boost your income.",
+      timestamp: START_TIME,
     },
   ]);
   const [incomeMultiplier, setIncomeMultiplier] = useState(1);
@@ -38,13 +40,19 @@ function App() {
   const clickSound = new Audio("sounds/click.mp3");
   const withdrawalSound = new Audio("sounds/cash.wav");
   const spinningCoinSound = new Audio("sounds/spinning-coin.mp3");
+  const [milestones, setMilestones] = useState({
+    oneThousand: null,
+    tenThousand: null,
+    oneHundredThousand: null,
+    oneMillion: null,
+    oneBillion: null,
+    tenEmployees: null,
+    oneHundredEmployees: null,
+    oneThousandEmployees: null,
+  });
 
-  const nextEvent = useCallback(() => {
-    const tier = employees.length < 10 ? "tierOne" : count < 1000000 ? "tierTwo" : "tierThree";
-    const newEvent = getRandomEvent(tier);
-
-    if (newEvent) {
-      const { reward, employeeMultiplier, playerMultiplier } =
+  const handleEvent = (newEvent) => {
+    const { reward, employeeMultiplier, playerMultiplier } =
         newEvent.consequences;
 
       setCount((prevCount) => prevCount + reward);
@@ -57,7 +65,61 @@ function App() {
         setTemporaryPlayerMultiplier(playerMultiplier);
       }
 
-      setEvents((prevEvents) => [...prevEvents, newEvent]);
+      setEvents((prevEvents) => [...prevEvents, {...newEvent, timestamp: Date.now()}]);
+  };
+
+  const updateMilestones = useCallback(() => {
+    let balanceEvent, employerEvent;
+
+    if (count > 1000 && !milestones.oneThousand) {
+      setMilestones((prev) => ({ ...prev, oneThousand: secondsPassed }));
+      balanceEvent = getMilestoneEvent("oneThousand", secondsPassed);
+    } else if (count >= 10000 && !milestones.tenThousand) {
+      setMilestones((prev) => ({ ...prev, tenThousand: secondsPassed }));
+      balanceEvent = getMilestoneEvent("tenThousand", secondsPassed);
+    } else if (count >= 100000 && !milestones.oneHundredThousand) {
+      setMilestones((prev) => ({ ...prev, oneHundredThousand: secondsPassed }));
+      balanceEvent = getMilestoneEvent("oneHundredThousand", secondsPassed);
+    } else if (count >= 1000000 && !milestones.oneMillion) {
+      setMilestones((prev) => ({ ...prev, oneMillion: secondsPassed }));
+      balanceEvent = getMilestoneEvent("oneMillion", secondsPassed);
+    } else if (count >= 1000000000 && !milestones.oneBillion) {
+      setMilestones((prev) => ({ ...prev, oneBillion: secondsPassed }));
+      balanceEvent = getMilestoneEvent("oneBillion", secondsPassed);
+    }
+
+    if (employees.length >= 10 && !milestones.tenEmployees) {
+      setMilestones((prev) => ({ ...prev, tenEmployees: secondsPassed }));
+      employerEvent = getMilestoneEvent("tenEmployees", secondsPassed);
+    } else if (employees.length >= 100 && !milestones.oneHundredEmployees) {
+      setMilestones((prev) => ({
+        ...prev,
+        oneHundredEmployees: secondsPassed,
+      }));
+      employerEvent = getMilestoneEvent("oneHundredEmployees", secondsPassed);
+    } else if (employees.length >= 1000 && !milestones.oneThousandEmployees) {
+      setMilestones((prev) => ({
+        ...prev,
+        oneThousandEmployees: secondsPassed,
+      }));
+      employerEvent = getMilestoneEvent("oneThousandEmployees", secondsPassed);
+    }
+
+    if (balanceEvent) {
+      handleEvent({...balanceEvent, secondsPassed});
+    }
+
+    if (employerEvent) {
+      handleEvent({...employerEvent, secondsPassed});
+    }
+  }, [count, employees, milestones]);
+
+  const nextEvent = useCallback(() => {
+    const tier = employees.length < 10 ? "tierOne" : count < 1000000 ? "tierTwo" : "tierThree";
+    const newEvent = getRandomEvent(tier);
+
+    if (newEvent) {
+      handleEvent(newEvent);
     }
   }, [employees, count]);
 
@@ -105,6 +167,8 @@ function App() {
       if (secondsPassed % EVENT_INTERVAL_SECONDS === 0) {
         nextEvent();
       }
+
+      updateMilestones();
     }, 1000);
 
     return () => {
@@ -116,6 +180,7 @@ function App() {
     temporaryEmployeeMultiplier,
     temporaryPlayerMultiplier,
     nextEvent,
+    updateMilestones,
   ]);
 
   useEffect(() => {

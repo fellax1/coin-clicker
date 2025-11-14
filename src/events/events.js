@@ -132,3 +132,111 @@ export function getRandomEvent(tier) {
   events[tier] = events[tier].filter(Boolean);
   return randomEvent;
 }
+
+export function getMilestoneEvent(milestone) {
+  const baseEvent = {
+    name: "Milestone reached 🏆",
+    description: `Congratulations! You have reached the milestone of ${milestone.name}. Enjoy this productivity boost as a reward!`,
+    consequences: {
+      reward: 0,
+      employeeMultiplier: { size: 1, period: 0 },
+      playerMultiplier: {
+        size: milestone.multiplier,
+        period: milestone.period,
+      },
+    },
+  };
+
+  switch (milestone) {
+    case "oneThousand":
+      return {
+        ...baseEvent,
+        name: "Milestone reached: 1,000 kronor 🏆",
+        description: `Congratulations! You have reached the milestone of 1,000 coins. Enjoy a 2x productivity boost for 3 seconds as a reward!`,
+        consequences: {
+          ...baseEvent.consequences,
+          playerMultiplier: { size: 2, period: 3 },
+        },
+      };
+
+    case "tenThousand":
+      return {
+        ...baseEvent,
+        name: "Milestone reached: 10,000 kronor 🏆",
+        description: `Congratulations! You have reached the milestone of 10,000 coins. Enjoy a 3x productivity boost for 4 seconds as a reward!`,
+        consequences: {
+          ...baseEvent.consequences,
+          playerMultiplier: { size: 3, period: 4 },
+        },
+      };
+
+    case "oneHundredThousand":
+      return {
+        ...baseEvent,
+        name: "Milestone reached: 100,000 kronor 🏆",
+        description: `Congratulations! You have reached the milestone of 100,000 coins. Enjoy a 4x productivity boost for 5 seconds as a reward!`,
+        consequences: {
+          ...baseEvent.consequences,
+          playerMultiplier: { size: 4, period: 5 },
+        },
+      };
+
+    case "oneMillion":
+      return {
+        ...baseEvent,
+        name: "Milestone reached: 1,000,000 kronor 🏆",
+        description: `Congratulations! You have reached the milestone of 1,000,000 coins. Enjoy a 5x productivity boost for 6 seconds as a reward! And make sure to pick out a nice top hat for yourself.`,
+        consequences: {
+          ...baseEvent.consequences,
+          playerMultiplier: { size: 5, period: 6 },
+        },
+      };
+
+    case "oneBillion":
+      return {
+        ...baseEvent,
+        name: "Milestone reached: 1,000,000,000 kronor 🏆",
+        description: `Congratulations! You have reached the milestone of 1,000,000,000 coins. Enjoy a 10x productivity boost for 10 seconds as a reward!`,
+        consequences: {
+          ...baseEvent.consequences,
+          playerMultiplier: { size: 10, period: 10 },
+        },
+      };
+
+    case "tenEmployees":
+      return {
+        ...baseEvent,
+        name: "Milestone reached: 10 employees 🏆",
+        description: `Congratulations! You have hired 10 employees. Enjoy a 1.5x productivity boost for 30 seconds as a reward! Stay productive!`,
+        consequences: {
+          ...baseEvent.consequences,
+          employeeMultiplier: { size: 1.5, period: 30 },
+        },
+      };
+
+    case "oneHundredEmployees":
+      return {
+        ...baseEvent,
+        name: "Milestone reached: 100 employees 🏆",
+        description: `Congratulations! You have hired 100 employees. Enjoy a 2x productivity boost for 60 seconds as a reward! Hope you have enough chairs!`,
+        consequences: {
+          ...baseEvent.consequences,
+          employeeMultiplier: { size: 2, period: 60 },
+        },
+      };
+
+    case "oneThousandEmployees":
+      return {
+        ...baseEvent,
+        name: "Milestone reached: 1,000 employees 🏆",
+        description: `Congratulations! You have hired 1,000 employees. Enjoy a 3x productivity boost for 120 seconds as a reward! Maybe it's time to consider giving everyone a raise?`,
+        consequences: {
+          ...baseEvent.consequences,
+          employeeMultiplier: { size: 3, period: 120 },
+        },
+      };
+
+    default:
+      return baseEvent;
+  }
+}
