@@ -364,12 +364,12 @@ const spinCoin = () => {
         <section className="right">
           <h2>Store</h2>
           <p>Workers:</p>
-          {
             <button
               onClick={ () =>{
                clickSound.play();
                 employIntern();
               }}
+              disabled={getEmployeesByType(employees, "intern").length >= MAX_INTERNS}
               title={
                 getRecruitmentButtonText(intern) +
                 `. Each intern reduces your own productivity by ${100 - intern.tutoringCostMultiplier * 100}%. You can employ up to ${MAX_INTERNS} interns.`
@@ -377,7 +377,6 @@ const spinCoin = () => {
             >
               Employ intern
             </button>
-          }
           <button
             disabled={count < juniorEmployee.recruitmentCost}
             onClick={() => {
