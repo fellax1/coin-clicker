@@ -309,7 +309,7 @@ function App() {
           <h2>Company</h2>
           <p className="count">
             <span>Current balance: </span>
-            {count.toFixed(2)} kronor
+            {prettyPrintNumber(count.toFixed(2))} kronor
           </p>
           <button
             className={`coin-button ${isClicked ? "clicked" : ""}`}
@@ -582,6 +582,10 @@ function getMultiplierClass(multiplier) {
   } else {
     return "";
   }
+}
+
+function prettyPrintNumber(number) {
+  return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
 
 export default App;
