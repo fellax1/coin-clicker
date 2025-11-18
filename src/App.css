@@ -248,6 +248,7 @@ section > h2 {
   gap: 1rem;
   width: 100%;
   align-items: center;
+  text-align: center;
 }
 
 .intern {
