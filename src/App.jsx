@@ -34,36 +34,42 @@ setInterval(() => {
 function App() {
   const [workCyclesPassed, setWorkCyclesPassed] = useState(0);
   const [eventCyclesPassed, setEventCyclesPassed] = useState(0);
-  
+
   const loadedState = loadState();
 
   const [count, setCount] = useState(loadedState.count);
   const [employees, setEmployees] = useState(loadedState.employees);
   const [events, setEvents] = useState(loadedState.events);
-  const [incomeMultiplier, setIncomeMultiplier] = useState(loadedState.incomeMultiplier);
-  const [temporaryPlayerMultiplier, setTemporaryPlayerMultiplier] = useState(loadedState.temporaryPlayerMultiplier);
+  const [incomeMultiplier, setIncomeMultiplier] = useState(
+    loadedState.incomeMultiplier,
+  );
+  const [temporaryPlayerMultiplier, setTemporaryPlayerMultiplier] = useState(
+    loadedState.temporaryPlayerMultiplier,
+  );
   const [temporaryEmployeeMultiplier, setTemporaryEmployeeMultiplier] =
     useState(loadedState.temporaryEmployeeMultiplier);
-  const [completedCourses, setCompletedCourses] = useState(loadedState.completedCourses);
+  const [completedCourses, setCompletedCourses] = useState(
+    loadedState.completedCourses,
+  );
   const [isClicked, setIsClicked] = useState(false);
   const [isSpinning, setIsSpinning] = useState(false);
 
   const [milestones, setMilestones] = useState(loadedState.milestones);
 
   const handleNewGame = useCallback(() => {
-      const state = getBlankState();
+    const state = getBlankState();
 
-      setCount(state.count);
-      setEmployees(state.employees);
-      setEvents(state.events);
-      setIncomeMultiplier(state.incomeMultiplier);
-      setTemporaryPlayerMultiplier(state.temporaryPlayerMultiplier);
-      setTemporaryEmployeeMultiplier(state.temporaryEmployeeMultiplier);
-      setCompletedCourses(state.completedCourses);
-      setMilestones(state.milestones);
+    setCount(state.count);
+    setEmployees(state.employees);
+    setEvents(state.events);
+    setIncomeMultiplier(state.incomeMultiplier);
+    setTemporaryPlayerMultiplier(state.temporaryPlayerMultiplier);
+    setTemporaryEmployeeMultiplier(state.temporaryEmployeeMultiplier);
+    setCompletedCourses(state.completedCourses);
+    setMilestones(state.milestones);
 
-      localStorage.setItem("coinClickerState", JSON.stringify(state));
-    }, []);
+    localStorage.setItem("coinClickerState", JSON.stringify(state));
+  }, []);
 
   const saveStateInLocalStorage = useCallback(() => {
     const state = {
@@ -315,7 +321,7 @@ function App() {
     }
     setCount((prevCount) => prevCount - robot.recruitmentCost);
     setEmployees((prevState) => [...prevState, { ...robot }]);
-  }
+  };
 
   const takeCourse = (course) => {
     setIncomeMultiplier((prevCount) => prevCount * course.multiplierIncrease);
@@ -417,91 +423,12 @@ function App() {
             </li>
           </ul>
           <div className="employees">
-             {getEmployeesByType(employees, "robot").length > 0 && (
-              <>
-                <h3>Robots</h3>
-                <p className="robots">
-                  {getEmployeesByType(employees, "robot").map(
-                    (employee, i) => (
-                      <span key={`robot-${i}`} title={employee.name}>
-                        {employee.image}
-                      </span>
-                    ),
-                  )}
-                </p>
-              </>
-            )}
-
-            {getEmployeesByType(employees, "scientist").length > 0 && (
-              <>
-                <h3>Scientists</h3>
-                <p className="scientists">
-                  {getEmployeesByType(employees, "scientist").map(
-                    (employee, i) => (
-                      <span key={`scientist-${i}`} title={employee.name}>
-                        {employee.image}
-                      </span>
-                    ),
-                  )}
-                </p>
-              </>
-            )}
-
-            {getEmployeesByType(employees, "engineer").length > 0 && (
-              <>
-                <h3>Engineers</h3>
-                <p className="engineers">
-                  {getEmployeesByType(employees, "engineer").map(
-                    (employee, i) => (
-                      <span key={`engineer-${i}`} title={employee.name}>
-                        {employee.image}
-                      </span>
-                    ),
-                  )}
-                </p>
-              </>
-            )}
-
-            {getEmployeesByType(employees, "senior").length > 0 && (
-              <>
-                <h3>Senior Employees</h3>
-                <p className="seniors">
-                  {getEmployeesByType(employees, "senior").map(
-                    (employee, i) => (
-                      <span key={`senior-${i}`} title={employee.name}>
-                        {employee.image}
-                      </span>
-                    ),
-                  )}
-                </p>
-              </>
-            )}
-
-            {getEmployeesByType(employees, "junior").length > 0 && (
-              <>
-                <h3>Junior Employees</h3>
-                <p className="juniors">
-                  {getEmployeesByType(employees, "junior").map(
-                    (employee, i) => (
-                      <span key={`junior-${i}`} title={employee.name}>
-                        {employee.image}
-                      </span>
-                    ),
-                  )}
-                </p>
-              </>
-            )}
-
-            {getEmployeesByType(employees, "intern").length > 0 && (
-              <h3>Interns</h3>
-            )}
-            <p className="interns">
-              {getEmployeesByType(employees, "intern").map((intern, i) => (
-                <span key={`intern-${i}`} title={intern.name}>
-                  {intern.image}
-                </span>
-              ))}
-            </p>
+            {renderEmployeeList(employees, "robot")}
+            {renderEmployeeList(employees, "scientist")}
+            {renderEmployeeList(employees, "engineer")}
+            {renderEmployeeList(employees, "senior")}
+            {renderEmployeeList(employees, "junior")}
+            {renderEmployeeList(employees, "intern")}
           </div>
         </section>
         <section className="right">
@@ -614,18 +541,20 @@ function App() {
         </section>
       </main>
       <footer className="footer">
-      <div className="multipliers">
-        <span className={getMultiplierClass(temporaryPlayerMultiplier.size)}>
-          Temporary player multiplier: x{temporaryPlayerMultiplier.size} (
-          {temporaryPlayerMultiplier.period} s left)
-        </span>
-        <span className="divider">|</span>
-        <span className={getMultiplierClass(temporaryEmployeeMultiplier.size)}>
-          Temporary employee multiplier: x{temporaryEmployeeMultiplier.size} (
-          {temporaryEmployeeMultiplier.period} s left)
-        </span>
+        <div className="multipliers">
+          <span className={getMultiplierClass(temporaryPlayerMultiplier.size)}>
+            Temporary player multiplier: x{temporaryPlayerMultiplier.size} (
+            {temporaryPlayerMultiplier.period} s left)
+          </span>
+          <span className="divider">|</span>
+          <span
+            className={getMultiplierClass(temporaryEmployeeMultiplier.size)}
+          >
+            Temporary employee multiplier: x{temporaryEmployeeMultiplier.size} (
+            {temporaryEmployeeMultiplier.period} s left)
+          </span>
         </div>
-        <button onClick={handleNewGame}>Nytt spel</button>
+        <button onClick={handleNewGame}>New game</button>
       </footer>
     </>
   );
@@ -664,31 +593,50 @@ function loadState() {
 
 function getBlankState() {
   return {
-      count: 0,
-      employees: [],
-      events: [
-        {
-          name: "Welcome to Coin Clicker!",
-          description:
-            "You have just started your coin clicking company. Get to work, and use your earnings to grow your business. Employ workers and take courses to boost your income.",
-          timestamp: START_TIME,
-        },
-      ],
-      incomeMultiplier: 1,
-      temporaryPlayerMultiplier: { size: 1, period: 0 },
-      temporaryEmployeeMultiplier: { size: 1, period: 0 },
-      completedCourses: [],
-      milestones: {
-        oneThousand: null,
-        tenThousand: null,
-        oneHundredThousand: null,
-        oneMillion: null,
-        oneBillion: null,
-        fiftyEmployees: null,
-        oneHundredEmployees: null,
-        oneThousandEmployees: null,
-      },    
-    }
+    count: 0,
+    employees: [],
+    events: [
+      {
+        name: "Welcome to Coin Clicker!",
+        description:
+          "You have just started your coin clicking company. Get to work, and use your earnings to grow your business. Employ workers and take courses to boost your income.",
+        timestamp: START_TIME,
+      },
+    ],
+    incomeMultiplier: 1,
+    temporaryPlayerMultiplier: { size: 1, period: 0 },
+    temporaryEmployeeMultiplier: { size: 1, period: 0 },
+    completedCourses: [],
+    milestones: {
+      oneThousand: null,
+      tenThousand: null,
+      oneHundredThousand: null,
+      oneMillion: null,
+      oneBillion: null,
+      fiftyEmployees: null,
+      oneHundredEmployees: null,
+      oneThousandEmployees: null,
+    },
+  };
+}
+
+function renderEmployeeList(employees, type) {
+  const heading = type.charAt(0).toUpperCase() + type.slice(1) + "s";
+
+  return (
+    getEmployeesByType(employees, type).length > 0 && (
+      <>
+        <h3>{heading} ({getEmployeesByType(employees, type).length})</h3>
+        <p className={type}>
+          {getEmployeesByType(employees, type).map((employee, i) => (
+            <span key={`${type}-${i}`} title={employee.name}>
+              {employee.image}
+            </span>
+          ))}
+        </p>
+      </>
+    )
+  );
 }
 
 export default App;
