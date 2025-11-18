@@ -33,38 +33,59 @@ setInterval(() => {
 function App() {
   const [workCyclesPassed, setWorkCyclesPassed] = useState(0);
   const [eventCyclesPassed, setEventCyclesPassed] = useState(0);
+  
+  const loadedState = loadState();
 
-  const [count, setCount] = useState(0);
-  const [employees, setEmployees] = useState([]);
-  const [events, setEvents] = useState([
-    {
-      name: "Welcome to Coin Clicker!",
-      description:
-        "You have just started your coin clicking company. Get to work, and use your earnings to grow your business. Employ workers and take courses to boost your income.",
-      timestamp: START_TIME,
-    },
-  ]);
-  const [incomeMultiplier, setIncomeMultiplier] = useState(1);
-  const [temporaryPlayerMultiplier, setTemporaryPlayerMultiplier] = useState({
-    size: 1,
-    period: 0,
-  });
+  const [count, setCount] = useState(loadedState.count);
+  const [employees, setEmployees] = useState(loadedState.employees);
+  const [events, setEvents] = useState(loadedState.events);
+  const [incomeMultiplier, setIncomeMultiplier] = useState(loadedState.incomeMultiplier);
+  const [temporaryPlayerMultiplier, setTemporaryPlayerMultiplier] = useState(loadedState.temporaryPlayerMultiplier);
   const [temporaryEmployeeMultiplier, setTemporaryEmployeeMultiplier] =
-    useState({ size: 1, period: 0 });
-  const [completedCourses, setCompletedCourses] = useState([]);
+    useState(loadedState.temporaryEmployeeMultiplier);
+  const [completedCourses, setCompletedCourses] = useState(loadedState.completedCourses);
   const [isClicked, setIsClicked] = useState(false);
   const [isSpinning, setIsSpinning] = useState(false);
 
-  const [milestones, setMilestones] = useState({
-    oneThousand: null,
-    tenThousand: null,
-    oneHundredThousand: null,
-    oneMillion: null,
-    oneBillion: null,
-    fiftyEmployees: null,
-    oneHundredEmployees: null,
-    oneThousandEmployees: null,
-  });
+  const [milestones, setMilestones] = useState(loadedState.milestones);
+
+  const handleNewGame = useCallback(() => {
+      const state = getBlankState();
+
+      setCount(state.count);
+      setEmployees(state.employees);
+      setEvents(state.events);
+      setIncomeMultiplier(state.incomeMultiplier);
+      setTemporaryPlayerMultiplier(state.temporaryPlayerMultiplier);
+      setTemporaryEmployeeMultiplier(state.temporaryEmployeeMultiplier);
+      setCompletedCourses(state.completedCourses);
+      setMilestones(state.milestones);
+
+      localStorage.setItem("coinClickerState", JSON.stringify(state));
+    }, []);
+
+  const saveStateInLocalStorage = useCallback(() => {
+    const state = {
+      count,
+      employees,
+      events,
+      incomeMultiplier,
+      temporaryPlayerMultiplier,
+      temporaryEmployeeMultiplier,
+      completedCourses,
+      milestones,
+    };
+    localStorage.setItem("coinClickerState", JSON.stringify(state));
+  }, [
+    count,
+    employees,
+    events,
+    incomeMultiplier,
+    temporaryPlayerMultiplier,
+    temporaryEmployeeMultiplier,
+    completedCourses,
+    milestones,
+  ]);
 
   const handleEvent = (newEvent) => {
     const { reward, employeeMultiplier, playerMultiplier } =
@@ -201,6 +222,7 @@ function App() {
       lastEventUpdate = secondsPassed;
     }
 
+    saveStateInLocalStorage();
     updateMilestones();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [eventCyclesPassed]);
@@ -556,6 +578,7 @@ function App() {
         </section>
       </main>
       <footer className="footer">
+      <div className="multipliers">
         <span className={getMultiplierClass(temporaryPlayerMultiplier.size)}>
           Temporary player multiplier: x{temporaryPlayerMultiplier.size} (
           {temporaryPlayerMultiplier.period} s left)
@@ -565,6 +588,8 @@ function App() {
           Temporary employee multiplier: x{temporaryEmployeeMultiplier.size} (
           {temporaryEmployeeMultiplier.period} s left)
         </span>
+        </div>
+        <button onClick={handleNewGame}>Nytt spel</button>
       </footer>
     </>
   );
@@ -590,6 +615,44 @@ function getMultiplierClass(multiplier) {
 
 function prettyPrintNumber(number) {
   return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
+function loadState() {
+  const savedState = localStorage.getItem("coinClickerState");
+  if (savedState) {
+    return JSON.parse(savedState);
+  } else {
+    return getBlankState();
+  }
+}
+
+function getBlankState() {
+  return {
+      count: 0,
+      employees: [],
+      events: [
+        {
+          name: "Welcome to Coin Clicker!",
+          description:
+            "You have just started your coin clicking company. Get to work, and use your earnings to grow your business. Employ workers and take courses to boost your income.",
+          timestamp: START_TIME,
+        },
+      ],
+      incomeMultiplier: 1,
+      temporaryPlayerMultiplier: { size: 1, period: 0 },
+      temporaryEmployeeMultiplier: { size: 1, period: 0 },
+      completedCourses: [],
+      milestones: {
+        oneThousand: null,
+        tenThousand: null,
+        oneHundredThousand: null,
+        oneMillion: null,
+        oneBillion: null,
+        fiftyEmployees: null,
+        oneHundredEmployees: null,
+        oneThousandEmployees: null,
+      },    
+    }
 }
 
 export default App;
