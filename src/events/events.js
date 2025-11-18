@@ -143,6 +143,28 @@ let events = {
       },
     },
   ],
+  tierThree: [
+    {
+      name: "Economic recession",
+      description:
+        "A global economic recession has hit, leading to a significant drop in consumer spending and business investment. Your company's revenue takes a major hit.",
+      consequences: {
+        reward: -100_000,
+        employeeMultiplier: { size: 0.5, period: 150 },
+        playerMultiplier: { size: 0.5, period: 30 },
+      },
+    },
+    {
+      name: "Cyborg enhancement",
+      description:
+        "You have been selected for a cutting-edge cyborg enhancement program. The procedure is expensive, but it significantly boosts your productivity beyond human limits.",
+      consequences: {
+        reward: -300_000,
+        employeeMultiplier: { size: 1, period: 0 },
+        playerMultiplier: { size: 100, period: 20 },
+      },
+    },
+  ],
 };
 
 export function getRandomEvent(tier) {

@@ -229,6 +229,10 @@ function App() {
       } else if (event.ctrlKey && event.key === "2") {
         setCount((prevCount) => prevCount + 1000);
       } else if (event.ctrlKey && event.key === "3") {
+        setCount((prevCount) => prevCount + 10000);
+      } else if (event.ctrlKey && event.key === "4") {
+        setCount((prevCount) => prevCount + 100000);
+      } else if (event.ctrlKey && event.key === "e") {
         nextEvent();
       }
     };
