@@ -8,6 +8,7 @@ import {
   engineer,
   scientist,
   robot,
+  AISingularity,
 } from "./employees";
 import "./App.css";
 import { Events } from "./events/events.jsx";
@@ -23,6 +24,7 @@ const EVENT_INTERVAL_SECONDS = 123;
 const START_TIME = Date.now();
 
 const MAX_INTERNS = 10;
+const MAX_AI_SINGULARITIES = 1;
 
 let secondsPassed = 0;
 let lastEventUpdate = 0;
@@ -258,9 +260,13 @@ function App() {
       } else if (event.ctrlKey && event.key === "2") {
         setCount((prevCount) => prevCount + 1000);
       } else if (event.ctrlKey && event.key === "3") {
-        setCount((prevCount) => prevCount + 10000);
+        setCount((prevCount) => prevCount + 10_000);
       } else if (event.ctrlKey && event.key === "4") {
-        setCount((prevCount) => prevCount + 100000);
+        setCount((prevCount) => prevCount + 100_000);
+      } else if (event.ctrlKey && event.key === "5") {
+        setCount((prevCount) => prevCount + 1_000_000);
+      } else if (event.ctrlKey && event.key === "6") {
+        setCount((prevCount) => prevCount + 10_000_000);
       } else if (event.ctrlKey && event.key === "e") {
         nextEvent();
       }
@@ -321,6 +327,14 @@ function App() {
     }
     setCount((prevCount) => prevCount - robot.recruitmentCost);
     setEmployees((prevState) => [...prevState, { ...robot }]);
+  };
+
+  const employAISingularity = () => {
+    if (count < AISingularity.recruitmentCost || getEmployeesByType(employees, "AI_singularity").length >= MAX_AI_SINGULARITIES || getEmployeesByType(employees, "robot").length < 1000) {
+      return;
+    }
+    setCount((prevCount) => prevCount - AISingularity.recruitmentCost);
+    setEmployees((prevState) => [...prevState, { ...AISingularity }]);
   };
 
   const takeCourse = (course) => {
@@ -423,6 +437,7 @@ function App() {
             </li>
           </ul>
           <div className="employees">
+            {renderEmployeeList(employees, "AI_singularity")}
             {renderEmployeeList(employees, "robot")}
             {renderEmployeeList(employees, "scientist")}
             {renderEmployeeList(employees, "engineer")}
@@ -505,7 +520,19 @@ function App() {
               }}
               title={getRecruitmentButtonText(robot)}
             >
-              Employ robot
+              Build robot
+            </button>
+
+            <button
+              disabled={count < AISingularity.recruitmentCost || getEmployeesByType(employees, "AI_singularity").length >= MAX_AI_SINGULARITIES}
+              onClick={() => {
+                withdrawalSound.currentTime = 0;
+                withdrawalSound.play();
+                employAISingularity();
+              }}
+              title={getEmployeesByType(employees, "robot").length === 0 ? "?????????" : getRecruitmentButtonText(AISingularity) + ` You need to build 1000 robots before building the singularity. You can only build ${MAX_AI_SINGULARITIES} AI singularity. Obviously.`}
+            >
+              { getEmployeesByType(employees, "robot").length === 0 ? "???" : "Build AI singularity"}
             </button>
           </div>
 
@@ -621,12 +648,13 @@ function getBlankState() {
 }
 
 function renderEmployeeList(employees, type) {
-  const heading = type.charAt(0).toUpperCase() + type.slice(1) + "s";
+  const numberOfEmployees = getEmployeesByType(employees, type).length;
+  const heading = (type.charAt(0).toUpperCase() + type.slice(1) + (numberOfEmployees > 1 ? "s" : "")).replace("_", " ");
 
   return (
     getEmployeesByType(employees, type).length > 0 && (
       <>
-        <h3>{heading} ({getEmployeesByType(employees, type).length})</h3>
+        <h3>{heading} ({numberOfEmployees})</h3>
         <p className={type}>
           {getEmployeesByType(employees, type).map((employee, i) => (
             <span key={`${type}-${i}`} title={employee.name}>

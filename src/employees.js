@@ -53,6 +53,15 @@ export const robot = {
   image: "🤖",
 };
 
+export const AISingularity = {
+  type: "AI_singularity",
+  salary: 1_000_000,
+  recruitmentCost: 1_000_000_000,
+  productionRate: 42_000_000,
+  name: "The Singularity",
+  image: "✨",
+};
+
 export const availableInterns = [
   { ...intern, name: "Leo", image: "👼" },
   { ...intern, name: "Rohan", image: "👼" },
