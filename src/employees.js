@@ -44,6 +44,15 @@ export const scientist = {
   image: "👩‍🔬",
 };
 
+export const robot = {
+  type: "robot",
+  salary: 200,
+  recruitmentCost: 2_000_000,
+  productionRate: 2100,
+  name: "Bender Bending Rodríguez",
+  image: "🤖",
+};
+
 export const availableInterns = [
   { ...intern, name: "Leo", image: "👼" },
   { ...intern, name: "Rohan", image: "👼" },

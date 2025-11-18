@@ -270,6 +270,10 @@ section > h2 {
   font-size: 4rem;
 }
 
+.robots {
+  font-size: 4.5rem;
+}
+
 .coin3d {
   position: relative;
   width: 300px;

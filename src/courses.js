@@ -34,4 +34,11 @@ export const courses = [
     multiplierIncrease: 25,
     description: "Increases income per click by 2500%",
   },
+  {
+    id: 6,
+    name: "Advanced Robotics Seminar",
+    cost: 100_000_000,
+    multiplierIncrease: 42,
+    description: "Increases income per click by 4200%",
+  },
 ];

@@ -7,6 +7,7 @@ import {
   availableInterns,
   engineer,
   scientist,
+  robot,
 } from "./employees";
 import "./App.css";
 import { Events } from "./events/events.jsx";
@@ -308,6 +309,14 @@ function App() {
     setEmployees((prevState) => [...prevState, { ...scientist }]);
   };
 
+  const employRobot = () => {
+    if (count < robot.recruitmentCost) {
+      return;
+    }
+    setCount((prevCount) => prevCount - robot.recruitmentCost);
+    setEmployees((prevState) => [...prevState, { ...robot }]);
+  }
+
   const takeCourse = (course) => {
     setIncomeMultiplier((prevCount) => prevCount * course.multiplierIncrease);
     setCount((prevCount) => prevCount - course.cost);
@@ -408,6 +417,21 @@ function App() {
             </li>
           </ul>
           <div className="employees">
+             {getEmployeesByType(employees, "robot").length > 0 && (
+              <>
+                <h3>Robots</h3>
+                <p className="robots">
+                  {getEmployeesByType(employees, "robot").map(
+                    (employee, i) => (
+                      <span key={`robot-${i}`} title={employee.name}>
+                        {employee.image}
+                      </span>
+                    ),
+                  )}
+                </p>
+              </>
+            )}
+
             {getEmployeesByType(employees, "scientist").length > 0 && (
               <>
                 <h3>Scientists</h3>
@@ -543,6 +567,18 @@ function App() {
               title={getRecruitmentButtonText(scientist)}
             >
               Employ scientist
+            </button>
+
+            <button
+              disabled={count < robot.recruitmentCost}
+              onClick={() => {
+                withdrawalSound.currentTime = 0;
+                withdrawalSound.play();
+                employRobot();
+              }}
+              title={getRecruitmentButtonText(robot)}
+            >
+              Employ robot
             </button>
           </div>
 
