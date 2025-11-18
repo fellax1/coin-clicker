@@ -14,7 +14,8 @@ import "./App.css";
 import { Events } from "./events/events.jsx";
 import { getMilestoneEvent, getRandomEvent } from "./events/events.js";
 
-const clickSound = new Audio("sounds/click.mp3");
+const coinClickSound = new Audio("sounds/drop-coin.mp3");
+const employInternSound = new Audio("sounds/click.mp3");
 const withdrawalSound = new Audio("sounds/cash.wav");
 const spinningCoinSound = new Audio("sounds/spinning-coin.mp3");
 
@@ -369,8 +370,7 @@ function App() {
           <button
             className={`coin-button ${isClicked ? "clicked" : ""}`}
             onClick={() => {
-              const clickSound = new Audio("sounds/drop-coin.mp3");
-              clickSound.play();
+              coinClickSound.cloneNode().play();
 
               setCount(
                 (count) =>
@@ -452,7 +452,7 @@ function App() {
           <div className="store-buttons">
             <button
               onClick={() => {
-                clickSound.play();
+                employInternSound.cloneNode().play();
                 employIntern();
               }}
               disabled={
@@ -468,8 +468,7 @@ function App() {
             <button
               disabled={count < juniorEmployee.recruitmentCost}
               onClick={() => {
-                withdrawalSound.currentTime = 0;
-                withdrawalSound.play();
+                withdrawalSound.cloneNode().play();
                 employJunior();
               }}
               title={getRecruitmentButtonText(juniorEmployee)}
@@ -479,8 +478,7 @@ function App() {
             <button
               disabled={count < seniorEmployee.recruitmentCost}
               onClick={() => {
-                withdrawalSound.currentTime = 0;
-                withdrawalSound.play();
+                withdrawalSound.cloneNode().play();
                 employSenior();
               }}
               title={getRecruitmentButtonText(seniorEmployee)}
@@ -490,8 +488,7 @@ function App() {
             <button
               disabled={count < engineer.recruitmentCost}
               onClick={() => {
-                withdrawalSound.currentTime = 0;
-                withdrawalSound.play();
+                withdrawalSound.cloneNode().play();
                 employEngineer();
               }}
               title={getRecruitmentButtonText(engineer)}
@@ -502,8 +499,7 @@ function App() {
             <button
               disabled={count < scientist.recruitmentCost}
               onClick={() => {
-                withdrawalSound.currentTime = 0;
-                withdrawalSound.play();
+                withdrawalSound.cloneNode().play();
                 employScientist();
               }}
               title={getRecruitmentButtonText(scientist)}
@@ -514,8 +510,7 @@ function App() {
             <button
               disabled={count < robot.recruitmentCost}
               onClick={() => {
-                withdrawalSound.currentTime = 0;
-                withdrawalSound.play();
+                withdrawalSound.cloneNode().play();
                 employRobot();
               }}
               title={getRecruitmentButtonText(robot)}
@@ -526,8 +521,7 @@ function App() {
             <button
               disabled={count < AISingularity.recruitmentCost || getEmployeesByType(employees, "AI_singularity").length >= MAX_AI_SINGULARITIES}
               onClick={() => {
-                withdrawalSound.currentTime = 0;
-                withdrawalSound.play();
+                withdrawalSound.cloneNode().play();
                 employAISingularity();
               }}
               title={getEmployeesByType(employees, "robot").length === 0 ? "?????????" : getRecruitmentButtonText(AISingularity) + ` You need to build 1000 robots before building the singularity. You can only build ${MAX_AI_SINGULARITIES} AI singularity. Obviously.`}
@@ -549,8 +543,7 @@ function App() {
                     isCompleted
                   }
                   onClick={() => {
-                    spinningCoinSound.currentTime = 0;
-                    spinningCoinSound.play();
+                    spinningCoinSound.cloneNode().play();
                     takeCourse(course);
                     spinCoin();
                   }}
