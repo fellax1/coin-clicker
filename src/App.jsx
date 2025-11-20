@@ -18,6 +18,7 @@ import { getMilestoneEvent, getRandomEvent } from "./events/events.js";
 import { Buildings, BuildingsStore } from "./buildings/buiidings.jsx";
 import { prettyPrintNumber } from "./lib/prettyPrintNumber.js";
 import { getTotalBuildingEfficiency } from "./buildings/buildings.js";
+import { LuxuryItems, LuxuryItemsStore } from "./luxuryItems/luxuryItems.jsx";
 
 const coinClickSound = new Audio("sounds/drop-coin.mp3");
 const employInternSound = new Audio("sounds/click.mp3");
@@ -59,6 +60,9 @@ function App() {
   const [builtBuildings, setBuiltBuildings] = useState(
     loadedState.builtBuildings ?? [],
   );
+  const [boughtLuxuryItems, setBoughtLuxuryItems] = useState(
+    loadedState.boughtLuxuryItems ?? [],
+  );
   const [isClicked, setIsClicked] = useState(false);
   const [isSpinning, setIsSpinning] = useState(false);
 
@@ -75,6 +79,7 @@ function App() {
     setTemporaryEmployeeMultiplier(state.temporaryEmployeeMultiplier);
     setCompletedCourses(state.completedCourses);
     setBuiltBuildings(state.builtBuildings);
+    setBoughtLuxuryItems(state.boughtLuxuryItems ?? []);
     setMilestones(state.milestones);
 
     localStorage.setItem("coinClickerState", JSON.stringify(state));
@@ -90,6 +95,7 @@ function App() {
       temporaryEmployeeMultiplier,
       completedCourses,
       builtBuildings,
+      boughtLuxuryItems,
       milestones,
     };
     localStorage.setItem("coinClickerState", JSON.stringify(state));
@@ -102,6 +108,7 @@ function App() {
     temporaryEmployeeMultiplier,
     completedCourses,
     builtBuildings,
+    boughtLuxuryItems,
     milestones,
   ]);
 
@@ -181,12 +188,8 @@ function App() {
   }, [count, employees, milestones]);
 
   const nextEvent = useCallback(() => {
-    const tier =
-      employees.length < 50
-        ? "tierOne"
-        : count < 1000000
-          ? "tierTwo"
-          : "tierThree";
+    const tier = milestones.oneMillion ? "tierThree" : milestones.oneHundredThousand ? "tierTwo" : "tierOne";
+
     const newEvent = getRandomEvent(tier);
 
     if (newEvent) {
@@ -281,6 +284,12 @@ function App() {
         setCount((prevCount) => prevCount + 1_000_000);
       } else if (event.ctrlKey && event.key === "6") {
         setCount((prevCount) => prevCount + 10_000_000);
+      } else if (event.ctrlKey && event.key === "7") {
+        setCount((prevCount) => prevCount + 100_000_000);
+      } else if (event.ctrlKey && event.key === "8") {
+        setCount((prevCount) => prevCount + 1_000_000_000); 
+      } else if (event.ctrlKey && event.key === "9") {
+        setCount((prevCount) => prevCount + 10_000_000_000); 
       } else if (event.ctrlKey && event.key === "e") {
         nextEvent();
       }
@@ -615,7 +624,10 @@ function App() {
             builtBuildings={builtBuildings}
             currentBalance={count}
             onClick={(building) => {
-              console.log("🚀 ~ App ~ building:", building)
+              if (count < building.cost) {
+                return;
+              }
+
               spinningCoinSound.cloneNode().play();
               spinCoin();
               setCount((prevCount) => prevCount - building.cost);
@@ -632,6 +644,28 @@ function App() {
               }
             }}
           />
+            <h3>Luxury Items</h3>
+            {!milestones.oneBillion && <button title="?????">???</button>}
+          {
+            milestones.oneBillion && (
+              <>
+              <LuxuryItemsStore 
+                boughtItems={boughtLuxuryItems}
+                currentBalance={count}
+                onClick={(item) => {
+                  if (count < item.cost) {
+                    return;
+                  }
+
+                  spinningCoinSound.cloneNode().play();
+                  spinCoin();
+                  setCount((prevCount) => prevCount - item.cost);
+                  setBoughtLuxuryItems((prev) => [...prev, item.id]);
+                }}
+              />
+              </>
+            )
+          }
         </section>
       </main>
       <footer className="footer">
@@ -648,6 +682,7 @@ function App() {
             {temporaryEmployeeMultiplier.period} s left)
           </span>
         </div>
+        <LuxuryItems boughtItems={boughtLuxuryItems} />
         <button onClick={handleNewGame}>New game</button>
       </footer>
     </>
@@ -698,12 +733,14 @@ function getBlankState() {
     temporaryEmployeeMultiplier: { size: 1, period: 0 },
     completedCourses: [],
     builtBuildings: [],
+    boughtLuxuryItems: [],
     milestones: {
       oneThousand: null,
       tenThousand: null,
       oneHundredThousand: null,
       oneMillion: null,
       oneBillion: null,
+      oneTrillion: null,
       fiftyEmployees: null,
       oneHundredEmployees: null,
       oneThousandEmployees: null,

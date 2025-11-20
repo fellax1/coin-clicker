@@ -1,0 +1,6 @@
+.luxury-items {
+    font-size: 3rem;
+    filter: sepia() saturate(250%);
+    display: flex; 
+    gap: 1rem;
+}
