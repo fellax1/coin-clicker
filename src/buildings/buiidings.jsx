@@ -40,5 +40,5 @@ export function Buildings({ builtBuildings }) {
 }
 
 function getBuildingTitleString(building) {
-  return `${building.name} (Effects: ${building.humanEmployeeEfficiency}x human, ${building.robotEmployeeEfficiency}x robot)`;
+  return `${building.name} (Effect: ${building.humanEmployeeEfficiency}x productivity for human employees${building.robotEmployeeEfficiency === 1 ?"" : `, ${building.robotEmployeeEfficiency}x productivity for robotic employees`})`;
 }

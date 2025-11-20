@@ -7,7 +7,7 @@ export const buildings = [
     name: "Cafeteria",
     description: "A place for your employees to relax and fill up on caffeine.",
     cost: 50_000,
-    humanEmployeeEfficiency: 1.1,
+    humanEmployeeEfficiency: 1.2,
     robotEmployeeEfficiency: 1.0,
   },
   {
@@ -16,7 +16,7 @@ export const buildings = [
     name: "Gym",
     description: "Keep your employees fit and healthy to boost productivity.",
     cost: 500_000,
-    humanEmployeeEfficiency: 1.2,
+    humanEmployeeEfficiency: 1.3,
     robotEmployeeEfficiency: 1.0,
   },
   {
@@ -26,7 +26,7 @@ export const buildings = [
     description:
       "Help your employees recover from injuries and reduce downtime.",
     cost: 2_500_000,
-    humanEmployeeEfficiency: 1.3,
+    humanEmployeeEfficiency: 1.4,
     robotEmployeeEfficiency: 1.0,
   },
   {
@@ -36,7 +36,7 @@ export const buildings = [
     description:
       "A facility to provide ongoing training and development for your staff. Building this also makes all juniors turn into senior employees, and all interns turn into junior employees.",
     cost: 8_000_000,
-    humanEmployeeEfficiency: 1.4,
+    humanEmployeeEfficiency: 1.55,
     robotEmployeeEfficiency: 1.0,
     employeesEffect: (employees) => {
       return employees.map((employee) => {
@@ -69,8 +69,8 @@ export const buildings = [
     description:
       "Efficient transportation for your employees to reduce commute time.",
     cost: 100_000_000,
-    humanEmployeeEfficiency: 1.15,
-    robotEmployeeEfficiency: 1.15,
+    humanEmployeeEfficiency: 1.4,
+    robotEmployeeEfficiency: 1.3,
   },
   {
     id: 7,
@@ -80,7 +80,7 @@ export const buildings = [
       "A high-tech facility to enhance the performance of your AI-driven employees.",
     cost: 15_000_000_000,
     humanEmployeeEfficiency: 1.0,
-    robotEmployeeEfficiency: 1.4,
+    robotEmployeeEfficiency: 1.8,
   },
 ];
 
