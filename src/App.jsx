@@ -385,7 +385,7 @@ function App() {
           >
             <div className={`coin3d ${isSpinning ? "spinning" : "coin"}`}>
               <div
-                className={`coin-aura ${temporaryPlayerMultiplier.size === 1 && temporaryEmployeeMultiplier.size === 1 ? "" : temporaryPlayerMultiplier.size < 1 || temporaryEmployeeMultiplier.size < 1 ? "event-negative" : "event-positive"}`}
+                className={`coin-aura ${temporaryPlayerMultiplier.size === 1 ? "" : temporaryPlayerMultiplier.size < 1 ? "event-negative" : "event-positive"}`}
               ></div>
               <img className="front" src="img/coin-1.png" alt="Krona" />
               <img
@@ -439,7 +439,7 @@ function App() {
               </span>
             </li>
           </ul>
-          <div className="employees">
+          <div className={"employees " +  (temporaryEmployeeMultiplier.size < 1 ? "event-negative" : temporaryEmployeeMultiplier.size > 1 ? "event-positive" : "")}> 
             {renderEmployeeList(employees, "AI_singularity")}
             {renderEmployeeList(employees, "robot")}
             {renderEmployeeList(employees, "scientist")}
