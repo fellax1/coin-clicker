@@ -16,7 +16,7 @@ export const juniorEmployee = {
   type: "junior",
   category: "human",
   salary: 0.5,
-  recruitmentCost: 200,
+  recruitmentCost: 100,
   productionRate: 1,
   name: "Emile Paloyeux Junior",
   image: "👷",

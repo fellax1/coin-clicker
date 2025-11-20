@@ -104,7 +104,7 @@ let events = {
       description:
         "One of your marketing campaigns went viral! You gained a lot of new users and your revenue skyrocketed.",
       consequences: {
-        reward: 5000,
+        reward: 15000,
         employeeMultiplier: { size: 1.2, period: 60 },
         playerMultiplier: { size: 1, period: 0 },
       },

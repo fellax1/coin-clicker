@@ -17,14 +17,14 @@ export const courses = [
     id: 3,
     name: "Leadership Masterclass",
     cost: 1000,
-    multiplierIncrease: 50,
+    multiplierIncrease: 5,
     description: "Increases income per click by 500%",
   },
   {
     id: 4,
     name: "Innovation Workshop",
     cost: 12_000,
-    multiplierIncrease: 20,
+    multiplierIncrease: 12,
     description: "Increases income per click by 1200%",
   },
   {
