@@ -444,7 +444,7 @@ function App() {
               <span className="bold">
                 {prettyPrintNumber(
                   employees
-                    .reduce((acc, employee) => acc + (employee.productionRate * buildingEffects[employee.category]), 0)
+                    .reduce((acc, employee) => acc + (employee.productionRate * buildingEffects[employee.category] * temporaryEmployeeMultiplier.size), 0)
                     .toFixed(2),
                 )}{" "}
                 kr
@@ -467,7 +467,7 @@ function App() {
                 {prettyPrintNumber(
                   (
                     employees.reduce(
-                      (acc, employee) => acc + (employee.productionRate * buildingEffects[employee.category]),
+                      (acc, employee) => acc + (employee.productionRate * buildingEffects[employee.category] * temporaryEmployeeMultiplier.size),
                       0,
                     ) -
                     employees.reduce(
