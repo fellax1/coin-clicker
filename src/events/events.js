@@ -191,12 +191,14 @@ let events = {
         playerMultiplier: { size: 100, period: 20 },
       },
     },
+  ],
+  tierFour: [
     {
       name: "Major data breach",
       description:
         "Your company has suffered a major data breach, compromising sensitive customer information. The fallout leads to hefty fines and a loss of customer trust.",
       consequences: {
-        reward: -200_000_000,
+        reward: -250_000_000,
         employeeMultiplier: { size: 0.2, period: 300 },
         playerMultiplier: { size: 1, period: 0 },
       },

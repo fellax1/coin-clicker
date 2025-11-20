@@ -192,7 +192,7 @@ function App() {
   }, [count, employees, milestones]);
 
   const nextEvent = useCallback(() => {
-    const tier = milestones.oneMillion ? "tierThree" : milestones.oneHundredThousand ? "tierTwo" : "tierOne";
+    const tier = milestones.oneBillion ? "tierFour" : milestones.oneMillion ? "tierThree" : milestones.oneHundredThousand ? "tierTwo" : "tierOne";
 
     const newEvent = getRandomEvent(tier);
 
