@@ -575,6 +575,7 @@ function App() {
             <button
               disabled={
                 count < AISingularity.recruitmentCost ||
+                getEmployeesByType(employees, "robot").length < 1000 ||
                 getEmployeesByType(employees, "AI_singularity").length >=
                   MAX_AI_SINGULARITIES
               }
