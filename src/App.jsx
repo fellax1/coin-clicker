@@ -129,18 +129,21 @@ function App() {
     if (count > 1000 && !milestones.oneThousand) {
       setMilestones((prev) => ({ ...prev, oneThousand: secondsPassed }));
       balanceEvent = getMilestoneEvent("oneThousand", secondsPassed);
-    } else if (count >= 10000 && !milestones.tenThousand) {
+    } else if (count >= 10_000 && !milestones.tenThousand) {
       setMilestones((prev) => ({ ...prev, tenThousand: secondsPassed }));
       balanceEvent = getMilestoneEvent("tenThousand", secondsPassed);
     } else if (count >= 100000 && !milestones.oneHundredThousand) {
       setMilestones((prev) => ({ ...prev, oneHundredThousand: secondsPassed }));
       balanceEvent = getMilestoneEvent("oneHundredThousand", secondsPassed);
-    } else if (count >= 1000000 && !milestones.oneMillion) {
+    } else if (count >= 1_000_000 && !milestones.oneMillion) {
       setMilestones((prev) => ({ ...prev, oneMillion: secondsPassed }));
       balanceEvent = getMilestoneEvent("oneMillion", secondsPassed);
-    } else if (count >= 1000000000 && !milestones.oneBillion) {
+    } else if (count >= 1_000_000_000 && !milestones.oneBillion) {
       setMilestones((prev) => ({ ...prev, oneBillion: secondsPassed }));
       balanceEvent = getMilestoneEvent("oneBillion", secondsPassed);
+    } else if (count >= 1_000_000_000_000 && !milestones.oneTrillion) { 
+      setMilestones((prev) => ({ ...prev, oneTrillion: secondsPassed }));
+      balanceEvent = getMilestoneEvent("oneTrillion", secondsPassed);
     }
 
     if (employees.length >= 50 && !milestones.fiftyEmployees) {
@@ -396,42 +399,42 @@ function App() {
             <li>
               Income per click:{" "}
               <span className="bold">
-                {(
+                {prettyPrintNumber((
                   1 *
                   incomeMultiplier *
                   temporaryPlayerMultiplier.size
-                ).toFixed(2)}{" "}
+                ).toFixed(2))}{" "}
                 kr
               </span>
             </li>
             <li>
               Income per second:{" "}
               <span className="bold">
-                {employees
+                {prettyPrintNumber(employees
                   .reduce((acc, employee) => acc + employee.productionRate, 0)
-                  .toFixed(2)}{" "}
+                  .toFixed(2))}{" "}
                 kr
               </span>
             </li>
             <li>
               Expenses per second:{" "}
               <span className="bold">
-                {employees
+                {prettyPrintNumber(employees
                   .reduce((acc, employee) => acc + employee.salary, 0)
-                  .toFixed(2)}{" "}
+                  .toFixed(2))}{" "}
                 kr
               </span>
             </li>
             <li>
               Net income per second:{" "}
               <span className="bold">
-                {(
+                {prettyPrintNumber((
                   employees.reduce(
                     (acc, employee) => acc + employee.productionRate,
                     0,
                   ) -
                   employees.reduce((acc, employee) => acc + employee.salary, 0)
-                ).toFixed(2)}{" "}
+                ).toFixed(2))}{" "}
                 kr
               </span>
             </li>
@@ -585,7 +588,7 @@ function getEmployeesByType(employees, type) {
 }
 
 function getRecruitmentButtonText(employee) {
-  return `Each ${employee.type} costs ${employee.recruitmentCost} kr in recruitment fee, has a salary of ${employee.salary} kr per second and produces ${employee.productionRate} kr every second`;
+  return `Each ${employee.type} costs ${prettyPrintNumber(employee.recruitmentCost)} kr in recruitment fee, has a salary of ${prettyPrintNumber(employee.salary)} kr per second and produces ${prettyPrintNumber(employee.productionRate)} kr every second`;
 }
 
 function getMultiplierClass(multiplier) {
