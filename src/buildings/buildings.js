@@ -47,10 +47,11 @@ export const buildings = [
         if (employee.type === "junior") {
             return {...seniorEmployee, name: employee.name};
         }
-        
+
         return employee;
       });
     },
+    incomeMultiplierEffect: (incomeMultiplier) => incomeMultiplier < 1 ? 1 : incomeMultiplier,
   },
   {
     id: 5,

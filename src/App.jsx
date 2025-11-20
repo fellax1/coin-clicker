@@ -626,6 +626,10 @@ function App() {
                   building.employeesEffect(prevEmployees),
                 );
               }
+
+              if (building.incomeMultiplierEffect) {
+                setIncomeMultiplier((prev) => building.incomeMultiplierEffect(prev));
+              }
             }}
           />
         </section>
