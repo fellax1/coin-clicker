@@ -66,6 +66,17 @@ let events = {
         playerMultiplier: { size: 2, period: 15 },
       },
     },
+    {
+      id: 7,
+      name: "A new competitor",
+      description:
+        "A new competitor has entered the market, causing some disruption to your business. You need to step up your game to stay ahead.",
+      consequences: {
+        reward: 0,
+        employeeMultiplier: { size: 0.9, period: 30 },
+        playerMultiplier: { size: 1, period: 0 },
+      },
+    },
   ],
   tierTwo: [
     {
@@ -148,6 +159,16 @@ let events = {
         playerMultiplier: { size: -1, period: 60 },
       },
     },
+    {
+      name: "Tech breakthrough",
+      description:
+        "Your R&D team has made a significant technological breakthrough, leading to a surge in productivity and revenue.",
+      consequences: {
+        reward: 10_000,
+        employeeMultiplier: { size: 2, period: 60 },
+        playerMultiplier: { size: 1, period: 0 },
+      },
+    }
   ],
   tierThree: [
     {
@@ -170,6 +191,16 @@ let events = {
         playerMultiplier: { size: 100, period: 20 },
       },
     },
+    {
+      name: "Major data breach",
+      description:
+        "Your company has suffered a major data breach, compromising sensitive customer information. The fallout leads to hefty fines and a loss of customer trust.",
+      consequences: {
+        reward: -200_000_000,
+        employeeMultiplier: { size: 0.2, period: 300 },
+        playerMultiplier: { size: 1, period: 0 },
+      },
+    }
   ],
 };
 
