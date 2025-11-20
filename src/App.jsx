@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { courses } from "./courses";
+import { courses } from "./courses/courses.js";
 import {
   intern,
   juniorEmployee,
@@ -9,10 +9,15 @@ import {
   scientist,
   robot,
   AISingularity,
-} from "./employees";
+  MAX_INTERNS,
+  MAX_AI_SINGULARITIES,
+} from "./employees/employees.js";
 import "./App.css";
 import { Events } from "./events/events.jsx";
 import { getMilestoneEvent, getRandomEvent } from "./events/events.js";
+import { Buildings, BuildingsStore } from "./buildings/buiidings.jsx";
+import { prettyPrintNumber } from "./lib/prettyPrintNumber.js";
+import { getTotalBuildingEfficiency } from "./buildings/buildings.js";
 
 const coinClickSound = new Audio("sounds/drop-coin.mp3");
 const employInternSound = new Audio("sounds/click.mp3");
@@ -23,9 +28,6 @@ const WORK_INTERVAL_MS = 200;
 const EVENT_INTERVAL_MS = 1000;
 const EVENT_INTERVAL_SECONDS = 123;
 const START_TIME = Date.now();
-
-const MAX_INTERNS = 10;
-const MAX_AI_SINGULARITIES = 1;
 
 let secondsPassed = 0;
 let lastEventUpdate = 0;
@@ -54,6 +56,9 @@ function App() {
   const [completedCourses, setCompletedCourses] = useState(
     loadedState.completedCourses,
   );
+  const [builtBuildings, setBuiltBuildings] = useState(
+    loadedState.builtBuildings ?? [],
+  );
   const [isClicked, setIsClicked] = useState(false);
   const [isSpinning, setIsSpinning] = useState(false);
 
@@ -69,6 +74,7 @@ function App() {
     setTemporaryPlayerMultiplier(state.temporaryPlayerMultiplier);
     setTemporaryEmployeeMultiplier(state.temporaryEmployeeMultiplier);
     setCompletedCourses(state.completedCourses);
+    setBuiltBuildings(state.builtBuildings);
     setMilestones(state.milestones);
 
     localStorage.setItem("coinClickerState", JSON.stringify(state));
@@ -83,6 +89,7 @@ function App() {
       temporaryPlayerMultiplier,
       temporaryEmployeeMultiplier,
       completedCourses,
+      builtBuildings,
       milestones,
     };
     localStorage.setItem("coinClickerState", JSON.stringify(state));
@@ -94,6 +101,7 @@ function App() {
     temporaryPlayerMultiplier,
     temporaryEmployeeMultiplier,
     completedCourses,
+    builtBuildings,
     milestones,
   ]);
 
@@ -141,7 +149,7 @@ function App() {
     } else if (count >= 1_000_000_000 && !milestones.oneBillion) {
       setMilestones((prev) => ({ ...prev, oneBillion: secondsPassed }));
       balanceEvent = getMilestoneEvent("oneBillion", secondsPassed);
-    } else if (count >= 1_000_000_000_000 && !milestones.oneTrillion) { 
+    } else if (count >= 1_000_000_000_000 && !milestones.oneTrillion) {
       setMilestones((prev) => ({ ...prev, oneTrillion: secondsPassed }));
       balanceEvent = getMilestoneEvent("oneTrillion", secondsPassed);
     }
@@ -187,10 +195,12 @@ function App() {
   }, [employees, count]);
 
   useEffect(() => {
+    const buildingEffects = getTotalBuildingEfficiency(builtBuildings);
     let totalProduction = employees.reduce(
       (acc, employee) =>
         acc +
         employee.productionRate *
+        buildingEffects[employee.category] *
           (WORK_INTERVAL_MS / 1000) *
           temporaryEmployeeMultiplier.size -
         employee.salary * (WORK_INTERVAL_MS / 1000),
@@ -334,7 +344,12 @@ function App() {
   };
 
   const employAISingularity = () => {
-    if (count < AISingularity.recruitmentCost || getEmployeesByType(employees, "AI_singularity").length >= MAX_AI_SINGULARITIES || getEmployeesByType(employees, "robot").length < 1000) {
+    if (
+      count < AISingularity.recruitmentCost ||
+      getEmployeesByType(employees, "AI_singularity").length >=
+        MAX_AI_SINGULARITIES ||
+      getEmployeesByType(employees, "robot").length < 1000
+    ) {
       return;
     }
     setCount((prevCount) => prevCount - AISingularity.recruitmentCost);
@@ -356,6 +371,8 @@ function App() {
       setTimeout(() => setIsSpinning(false), 2000);
     }, 20);
   };
+
+  const buildingEffects = getTotalBuildingEfficiency(builtBuildings);
 
   return (
     <>
@@ -399,47 +416,68 @@ function App() {
             <li>
               Income per click:{" "}
               <span className="bold">
-                {prettyPrintNumber((
-                  1 *
-                  incomeMultiplier *
-                  temporaryPlayerMultiplier.size
-                ).toFixed(2))}{" "}
+                {prettyPrintNumber(
+                  (
+                    1 *
+                    incomeMultiplier *
+                    temporaryPlayerMultiplier.size
+                  ).toFixed(2),
+                )}{" "}
                 kr
               </span>
             </li>
             <li>
               Income per second:{" "}
               <span className="bold">
-                {prettyPrintNumber(employees
-                  .reduce((acc, employee) => acc + employee.productionRate, 0)
-                  .toFixed(2))}{" "}
+                {prettyPrintNumber(
+                  employees
+                    .reduce((acc, employee) => acc + (employee.productionRate * buildingEffects[employee.category]), 0)
+                    .toFixed(2),
+                )}{" "}
                 kr
               </span>
             </li>
             <li>
               Expenses per second:{" "}
               <span className="bold">
-                {prettyPrintNumber(employees
-                  .reduce((acc, employee) => acc + employee.salary, 0)
-                  .toFixed(2))}{" "}
+                {prettyPrintNumber(
+                  employees
+                    .reduce((acc, employee) => acc + employee.salary, 0)
+                    .toFixed(2),
+                )}{" "}
                 kr
               </span>
             </li>
             <li>
               Net income per second:{" "}
               <span className="bold">
-                {prettyPrintNumber((
-                  employees.reduce(
-                    (acc, employee) => acc + employee.productionRate,
-                    0,
-                  ) -
-                  employees.reduce((acc, employee) => acc + employee.salary, 0)
-                ).toFixed(2))}{" "}
+                {prettyPrintNumber(
+                  (
+                    employees.reduce(
+                      (acc, employee) => acc + (employee.productionRate * buildingEffects[employee.category]),
+                      0,
+                    ) -
+                    employees.reduce(
+                      (acc, employee) => acc + employee.salary,
+                      0,
+                    )
+                  ).toFixed(2),
+                )}{" "}
                 kr
               </span>
             </li>
           </ul>
-          <div className={"employees " +  (temporaryEmployeeMultiplier.size < 1 ? "event-negative" : temporaryEmployeeMultiplier.size > 1 ? "event-positive" : "")}> 
+          <Buildings builtBuildings={builtBuildings} />
+          <div
+            className={
+              "employees " +
+              (temporaryEmployeeMultiplier.size < 1
+                ? "event-negative"
+                : temporaryEmployeeMultiplier.size > 1
+                  ? "event-positive"
+                  : "")
+            }
+          >
             {renderEmployeeList(employees, "AI_singularity")}
             {renderEmployeeList(employees, "robot")}
             {renderEmployeeList(employees, "scientist")}
@@ -522,14 +560,25 @@ function App() {
             </button>
 
             <button
-              disabled={count < AISingularity.recruitmentCost || getEmployeesByType(employees, "AI_singularity").length >= MAX_AI_SINGULARITIES}
+              disabled={
+                count < AISingularity.recruitmentCost ||
+                getEmployeesByType(employees, "AI_singularity").length >=
+                  MAX_AI_SINGULARITIES
+              }
               onClick={() => {
                 withdrawalSound.cloneNode().play();
                 employAISingularity();
               }}
-              title={getEmployeesByType(employees, "robot").length === 0 ? "?????????" : getRecruitmentButtonText(AISingularity) + ` You need to build 1000 robots before building the singularity. You can only build ${MAX_AI_SINGULARITIES} AI singularity. Obviously.`}
+              title={
+                getEmployeesByType(employees, "robot").length === 0
+                  ? "?????????"
+                  : getRecruitmentButtonText(AISingularity) +
+                    ` You need to build 1000 robots before building the singularity. You can only build ${MAX_AI_SINGULARITIES} AI singularity. Obviously.`
+              }
             >
-              { getEmployeesByType(employees, "robot").length === 0 ? "???" : "Build AI singularity"}
+              {getEmployeesByType(employees, "robot").length === 0
+                ? "???"
+                : "Build AI singularity"}
             </button>
           </div>
 
@@ -550,7 +599,7 @@ function App() {
                     takeCourse(course);
                     spinCoin();
                   }}
-                  title={`${course.description} (Cost: ${course.cost} kr)`}
+                  title={`${course.description} (Cost: ${prettyPrintNumber(course.cost)} kr)`}
                 >
                   {course.name}
                   {isCompleted && <span style={{ marginLeft: 16 }}>✅</span>}
@@ -561,6 +610,24 @@ function App() {
           {completedCourses.length === courses.length && (
             <p>All courses completed!</p>
           )}
+          <h3>Buildings</h3>
+          <BuildingsStore
+            builtBuildings={builtBuildings}
+            currentBalance={count}
+            onClick={(building) => {
+              console.log("🚀 ~ App ~ building:", building)
+              spinningCoinSound.cloneNode().play();
+              spinCoin();
+              setCount((prevCount) => prevCount - building.cost);
+              setBuiltBuildings((prev) => [...prev, building.id]);
+
+              if (building.employeesEffect) {
+                setEmployees((prevEmployees) =>
+                  building.employeesEffect(prevEmployees),
+                );
+              }
+            }}
+          />
         </section>
       </main>
       <footer className="footer">
@@ -601,10 +668,6 @@ function getMultiplierClass(multiplier) {
   }
 }
 
-function prettyPrintNumber(number) {
-  return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-}
-
 function loadState() {
   const savedState = localStorage.getItem("coinClickerState");
   if (savedState) {
@@ -630,6 +693,7 @@ function getBlankState() {
     temporaryPlayerMultiplier: { size: 1, period: 0 },
     temporaryEmployeeMultiplier: { size: 1, period: 0 },
     completedCourses: [],
+    builtBuildings: [],
     milestones: {
       oneThousand: null,
       tenThousand: null,
@@ -645,12 +709,18 @@ function getBlankState() {
 
 function renderEmployeeList(employees, type) {
   const numberOfEmployees = getEmployeesByType(employees, type).length;
-  const heading = (type.charAt(0).toUpperCase() + type.slice(1) + (numberOfEmployees > 1 ? "s" : "")).replace("_", " ");
+  const heading = (
+    type.charAt(0).toUpperCase() +
+    type.slice(1) +
+    (numberOfEmployees > 1 ? "s" : "")
+  ).replace("_", " ");
 
   return (
     getEmployeesByType(employees, type).length > 0 && (
       <>
-        <h3>{heading} ({numberOfEmployees})</h3>
+        <h3>
+          {heading} ({numberOfEmployees})
+        </h3>
         <p className={type}>
           {getEmployeesByType(employees, type).map((employee, i) => (
             <span key={`${type}-${i}`} title={employee.name}>

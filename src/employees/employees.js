@@ -1,5 +1,9 @@
+export const MAX_INTERNS = 10;
+export const MAX_AI_SINGULARITIES = 1;
+
 export const intern = {
   type: "intern",
+  category: "human",
   salary: 0,
   recruitmentCost: 0,
   productionRate: 0.1,
@@ -10,6 +14,7 @@ export const intern = {
 
 export const juniorEmployee = {
   type: "junior",
+  category: "human",
   salary: 0.5,
   recruitmentCost: 200,
   productionRate: 1,
@@ -19,6 +24,7 @@ export const juniorEmployee = {
 
 export const seniorEmployee = {
   type: "senior",
+  category: "human",
   salary: 1,
   recruitmentCost: 500,
   productionRate: 5,
@@ -28,6 +34,7 @@ export const seniorEmployee = {
 
 export const engineer = {
   type: "engineer",
+  category: "human",
   salary: 5,
   recruitmentCost: 2000,
   productionRate: 20,
@@ -37,6 +44,7 @@ export const engineer = {
 
 export const scientist = {
   type: "scientist",
+  category: "human",
   salary: 20,
   recruitmentCost: 100000,
   productionRate: 900,
@@ -46,6 +54,7 @@ export const scientist = {
 
 export const robot = {
   type: "robot",
+  category: "machine",
   salary: 200,
   recruitmentCost: 2_000_000,
   productionRate: 2100,
@@ -55,6 +64,7 @@ export const robot = {
 
 export const AISingularity = {
   type: "AI_singularity",
+  category: "machine",
   salary: 1_000_000,
   recruitmentCost: 1_000_000_000,
   productionRate: 42_000_000,
