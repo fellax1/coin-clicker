@@ -73,9 +73,9 @@ export const AISingularity = {
 };
 
 export const availableInterns = [
-  { ...intern, name: "Leo", image: "👼" },
-  { ...intern, name: "Rohan", image: "👼" },
-  { ...intern, name: "Yabing", image: "👼" },
-  { ...intern, name: "Janne", image: "👼" },
-  { ...intern, name: "Frida", image: "👼" },
+  { ...intern, name: "Leo" },
+  { ...intern, name: "Rohan" },
+  { ...intern, name: "Yabing" },
+  { ...intern, name: "Janne" },
+  { ...intern, name: "Frida" },
 ];

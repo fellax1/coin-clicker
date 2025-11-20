@@ -1,4 +1,4 @@
-import { juniorEmployee } from "../employees/employees";
+import { juniorEmployee, seniorEmployee } from "../employees/employees";
 
 export const buildings = [
   {
@@ -34,7 +34,7 @@ export const buildings = [
     icon: "📚",
     name: "Learning center",
     description:
-      "A facility to provide ongoing training and development for your staff. Building this also makes all interns turn into junior employees.",
+      "A facility to provide ongoing training and development for your staff. Building this also makes all juniors turn into senior employees, and all interns turn into junior employees.",
     cost: 8_000_000,
     humanEmployeeEfficiency: 1.4,
     robotEmployeeEfficiency: 1.0,
@@ -43,6 +43,11 @@ export const buildings = [
         if (employee.type === "intern") {
           return {...juniorEmployee, name: employee.name};
         }
+
+        if (employee.type === "junior") {
+            return {...seniorEmployee, name: employee.name};
+        }
+        
         return employee;
       });
     },
