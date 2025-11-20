@@ -33,7 +33,7 @@ export function Buildings({ builtBuildings }) {
     <ul className="built-buildings">
       {builtBuildings.map((buildingId, index) => {
         const building = buildings.find((b) => b.id === buildingId);
-        return <li key={index} title={building ? getBuildingTitleString(building) : "Unknown Building"}>{building ? building.icon : "?"} </li>;
+        return <li className="building" key={index} title={building ? getBuildingTitleString(building) : "Unknown Building"}>{building ? building.icon : "?"} </li>;
       })}
     </ul>
   )
