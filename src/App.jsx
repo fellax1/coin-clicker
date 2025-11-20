@@ -4,13 +4,13 @@ import {
   intern,
   juniorEmployee,
   seniorEmployee,
-  availableInterns,
   engineer,
   scientist,
   robot,
   AISingularity,
   MAX_INTERNS,
   MAX_AI_SINGULARITIES,
+  getEmployee,
 } from "./employees/employees.js";
 import "./App.css";
 import { Events } from "./events/events.jsx";
@@ -296,7 +296,7 @@ function App() {
     if (employees.filter((e) => e.type === "intern").length >= MAX_INTERNS) {
       return;
     }
-    const nextIntern = availableInterns.pop() ?? { ...intern };
+    const nextIntern = getEmployee("intern");
     setEmployees((prevState) => [...prevState, nextIntern]);
     setIncomeMultiplier(
       (prevCount) => prevCount * nextIntern.tutoringCostMultiplier,
@@ -308,7 +308,7 @@ function App() {
       return;
     }
     setCount((prevCount) => prevCount - juniorEmployee.recruitmentCost);
-    setEmployees((prevState) => [...prevState, { ...juniorEmployee }]);
+    setEmployees((prevState) => [...prevState, getEmployee("junior")]);
   };
 
   const employSenior = () => {
@@ -316,7 +316,7 @@ function App() {
       return;
     }
     setCount((prevCount) => prevCount - seniorEmployee.recruitmentCost);
-    setEmployees((prevState) => [...prevState, { ...seniorEmployee }]);
+    setEmployees((prevState) => [...prevState, getEmployee("senior")]);
   };
 
   const employEngineer = () => {
@@ -324,7 +324,7 @@ function App() {
       return;
     }
     setCount((prevCount) => prevCount - engineer.recruitmentCost);
-    setEmployees((prevState) => [...prevState, { ...engineer }]);
+    setEmployees((prevState) => [...prevState, getEmployee("engineer")]);
   };
 
   const employScientist = () => {
@@ -332,7 +332,7 @@ function App() {
       return;
     }
     setCount((prevCount) => prevCount - scientist.recruitmentCost);
-    setEmployees((prevState) => [...prevState, { ...scientist }]);
+    setEmployees((prevState) => [...prevState, getEmployee("scientist")]);
   };
 
   const employRobot = () => {
@@ -340,7 +340,7 @@ function App() {
       return;
     }
     setCount((prevCount) => prevCount - robot.recruitmentCost);
-    setEmployees((prevState) => [...prevState, { ...robot }]);
+    setEmployees((prevState) => [...prevState, getEmployee("robot")]);
   };
 
   const employAISingularity = () => {
@@ -353,7 +353,7 @@ function App() {
       return;
     }
     setCount((prevCount) => prevCount - AISingularity.recruitmentCost);
-    setEmployees((prevState) => [...prevState, { ...AISingularity }]);
+    setEmployees((prevState) => [...prevState, getEmployee("AI_singularity")]);
   };
 
   const takeCourse = (course) => {
