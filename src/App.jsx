@@ -85,6 +85,10 @@ function App() {
     localStorage.setItem("coinClickerState", JSON.stringify(state));
   }, []);
 
+  if (count === null || isNaN(count)) {
+    handleNewGame();
+  }
+
   const saveStateInLocalStorage = useCallback(() => {
     const state = {
       count,
