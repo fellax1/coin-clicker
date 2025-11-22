@@ -493,13 +493,13 @@ function App() {
                   : "")
             }
           >
-            <EmployeeList employees={employees} type="AI_singularity" />
-            <EmployeeList employees={employees} type="robot" />
-            <EmployeeList employees={employees} type="scientist" />
-            <EmployeeList employees={employees} type="engineer" />
-            <EmployeeList employees={employees} type="senior" />
-            <EmployeeList employees={employees} type="junior" />
-            <EmployeeList employees={employees} type="intern" />
+            <EmployeeList employees={employees} type="AI_singularity" employeeMultiplier={temporaryEmployeeMultiplier.size} buildingEffects={buildingEffects} />
+            <EmployeeList employees={employees} type="robot" employeeMultiplier={temporaryEmployeeMultiplier.size} buildingEffects={buildingEffects} />
+            <EmployeeList employees={employees} type="scientist" employeeMultiplier={temporaryEmployeeMultiplier.size} buildingEffects={buildingEffects} />
+            <EmployeeList employees={employees} type="engineer" employeeMultiplier={temporaryEmployeeMultiplier.size} buildingEffects={buildingEffects} />
+            <EmployeeList employees={employees} type="senior" employeeMultiplier={temporaryEmployeeMultiplier.size} buildingEffects={buildingEffects} />
+            <EmployeeList employees={employees} type="junior" employeeMultiplier={temporaryEmployeeMultiplier.size} buildingEffects={buildingEffects} />
+            <EmployeeList employees={employees} type="intern" employeeMultiplier={temporaryEmployeeMultiplier.size} buildingEffects={buildingEffects} />
           </div>
         </section>
         <section className="right">

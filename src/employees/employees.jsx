@@ -1,6 +1,10 @@
+import { prettyPrintNumber } from "../lib/prettyPrintNumber";
 
-export function EmployeeList({employees, type}) {
-  const numberOfEmployees = getEmployeesByType(employees, type).length;
+export function EmployeeList({employees, type, employeeMultiplier = 1, buildingEffects = {}}) {
+  const employeesOfType = employees.filter((employee) => employee.type === type);
+  const effect = buildingEffects[employeesOfType[0]?.category] || 1;
+  const adjustedEmployeeMultiplier = employeeMultiplier * effect;
+  const numberOfEmployees = employeesOfType.length;
   const heading = (
     type.charAt(0).toUpperCase() +
     type.slice(1) +
@@ -8,14 +12,14 @@ export function EmployeeList({employees, type}) {
   ).replace("_", " ");
 
   return (
-    getEmployeesByType(employees, type).length > 0 && (
+    employeesOfType.length > 0 && (
       <>
         <h3>
           {heading} ({numberOfEmployees})
         </h3>
         <p className={type}>
-          {getEmployeesByType(employees, type).slice(0, 150).map((employee, i) => (
-            <span key={`${type}-${i}`} title={employee.name}>
+          {employeesOfType.slice(0, 150).map((employee, i) => (
+            <span key={`${type}-${i}`} title={employee.name + "\nProduction Rate: " + prettyPrintNumber((employee.productionRate * adjustedEmployeeMultiplier).toFixed(2))}>
               {employee.image}
             </span>
           ))}
@@ -23,8 +27,4 @@ export function EmployeeList({employees, type}) {
       </>
     )
   );
-}
-
-function getEmployeesByType(employees, type) {
-  return employees.filter((employee) => employee.type === type);
 }
