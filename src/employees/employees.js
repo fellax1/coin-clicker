@@ -17,7 +17,7 @@ export const juniorEmployee = {
   category: "human",
   salary: 0.5,
   recruitmentCost: 100,
-  productionRate: 1,
+  productionRate: 1.5,
   name: "Emile Paloyeux Junior",
   image: "👷",
 };
@@ -27,7 +27,7 @@ export const seniorEmployee = {
   category: "human",
   salary: 1,
   recruitmentCost: 500,
-  productionRate: 5,
+  productionRate: 10,
   name: "Señor Lopez",
   image: "🧑‍💼",
 };
@@ -37,7 +37,7 @@ export const engineer = {
   category: "human",
   salary: 5,
   recruitmentCost: 2000,
-  productionRate: 20,
+  productionRate: 60,
   name: "Uncle Bob",
   image: "👨‍🔧",
 };
@@ -57,7 +57,7 @@ export const robot = {
   category: "machine",
   salary: 200,
   recruitmentCost: 2_000_000,
-  productionRate: 2100,
+  productionRate: 3500,
   name: "Bender Bending Rodríguez",
   image: "🤖",
 };
@@ -65,7 +65,7 @@ export const robot = {
 export const AISingularity = {
   type: "AI_singularity",
   category: "machine",
-  salary: 1_000_000,
+  salary: 2_000_000,
   recruitmentCost: 1_000_000_000,
   productionRate: 42_000_000,
   name: "The Singularity",
