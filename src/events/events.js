@@ -105,7 +105,7 @@ let events = {
         "One of your marketing campaigns went viral! You gained a lot of new users and your revenue skyrocketed.",
       consequences: {
         reward: 15000,
-        employeeMultiplier: { size: 1.2, period: 60 },
+        employeeMultiplier: { size: 1.5, period: 60 },
         playerMultiplier: { size: 1, period: 0 },
       },
     },
@@ -115,7 +115,7 @@ let events = {
         "An accident occurred at your workplace, leading to temporary shutdown and low morale among workers.",
       consequences: {
         reward: -3000,
-        employeeMultiplier: { size: 1.8, period: 45 },
+        employeeMultiplier: { size: 0.8, period: 45 },
         playerMultiplier: { size: 1, period: 0 },
       },
     },
@@ -125,7 +125,7 @@ let events = {
         "Your main server went down for several hours, causing a loss in revenue and user trust.",
       consequences: {
         reward: -2000,
-        employeeMultiplier: { size: 1.9, period: 30 },
+        employeeMultiplier: { size: 0.9, period: 30 },
         playerMultiplier: { size: 1, period: 0 },
       },
     },
@@ -166,7 +166,7 @@ let events = {
       consequences: {
         reward: 10_000,
         employeeMultiplier: { size: 2, period: 60 },
-        playerMultiplier: { size: 1, period: 0 },
+        playerMultiplier: { size: 1.5, period: 0 },
       },
     }
   ],
