@@ -14,7 +14,7 @@ export function EmployeeList({employees, type}) {
           {heading} ({numberOfEmployees})
         </h3>
         <p className={type}>
-          {getEmployeesByType(employees, type).map((employee, i) => (
+          {getEmployeesByType(employees, type).slice(0, 150).map((employee, i) => (
             <span key={`${type}-${i}`} title={employee.name}>
               {employee.image}
             </span>
