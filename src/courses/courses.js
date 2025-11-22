@@ -42,3 +42,20 @@ export const courses = [
     description: "Increases income per click by 4200%",
   },
 ];
+
+export const advancedCourses = [
+  {
+    id: 7,
+    name: "Quantum Computing Symposium",
+    cost: 5_000_000_000,
+    multiplierIncrease: 50,
+    description: "Increases income per click by 5000%",
+  },
+  {
+    id: 8,
+    name: "AI prompting for Dummies",
+    cost: 150_000_000_000,
+    multiplierIncrease: 100,
+    description: "Learn how to prompt and increase income per click by 10000%",
+  },
+]

@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { courses } from "./courses/courses.js";
+import { advancedCourses, courses } from "./courses/courses.js";
 import {
   intern,
   juniorEmployee,
@@ -19,6 +19,8 @@ import { Buildings, BuildingsStore } from "./buildings/buiidings.jsx";
 import { prettyPrintNumber } from "./lib/prettyPrintNumber.js";
 import { getTotalBuildingEfficiency } from "./buildings/buildings.js";
 import { LuxuryItems, LuxuryItemsStore } from "./luxuryItems/luxuryItems.jsx";
+import { EmployeeList } from "./employees/employees.jsx";
+import { Courses } from "./courses/courses.jsx";
 
 const coinClickSound = new Audio("sounds/drop-coin.mp3");
 const employInternSound = new Audio("sounds/click.mp3");
@@ -491,13 +493,13 @@ function App() {
                   : "")
             }
           >
-            {renderEmployeeList(employees, "AI_singularity")}
-            {renderEmployeeList(employees, "robot")}
-            {renderEmployeeList(employees, "scientist")}
-            {renderEmployeeList(employees, "engineer")}
-            {renderEmployeeList(employees, "senior")}
-            {renderEmployeeList(employees, "junior")}
-            {renderEmployeeList(employees, "intern")}
+            <EmployeeList employees={employees} type="AI_singularity" />
+            <EmployeeList employees={employees} type="robot" />
+            <EmployeeList employees={employees} type="scientist" />
+            <EmployeeList employees={employees} type="engineer" />
+            <EmployeeList employees={employees} type="senior" />
+            <EmployeeList employees={employees} type="junior" />
+            <EmployeeList employees={employees} type="intern" />
           </div>
         </section>
         <section className="right">
@@ -597,33 +599,30 @@ function App() {
           </div>
 
           <h3>Courses</h3>
-          <div className="store-buttons">
-            {courses.map((course) => {
-              const isCompleted = completedCourses.includes(course.id);
-              return (
-                <button
-                  key={course.id}
-                  disabled={
-                    count < course.cost ||
-                    completedCourses.length >= courses.length ||
-                    isCompleted
-                  }
-                  onClick={() => {
-                    spinningCoinSound.cloneNode().play();
-                    takeCourse(course);
-                    spinCoin();
-                  }}
-                  title={`${course.description} (Cost: ${prettyPrintNumber(course.cost)} kr)`}
-                >
-                  {course.name}
-                  {isCompleted && <span style={{ marginLeft: 16 }}>✅</span>}
-                </button>
-              );
-            })}
-          </div>
-          {completedCourses.length === courses.length && (
-            <p>All courses completed!</p>
-          )}
+          <Courses
+            courses={courses}
+            completedCourses={completedCourses}
+            count={count}
+            onClick={(course) => {
+              spinningCoinSound.cloneNode().play();
+              takeCourse(course);
+              spinCoin();
+            }}
+          />
+
+          <h3>Advanced Courses</h3>
+          <Courses
+            hidden={!milestones.oneBillion}
+            courses={advancedCourses}
+            completedCourses={completedCourses}
+            count={count}
+            onClick={(course) => {
+              spinningCoinSound.cloneNode().play();
+              takeCourse(course);
+              spinCoin();
+            }}
+          />
+
           <h3>Buildings</h3>
           <BuildingsStore
             builtBuildings={builtBuildings}
@@ -650,7 +649,7 @@ function App() {
             }}
           />
             <h3>Luxury Items</h3>
-            {!milestones.oneBillion && <button title="?????">???</button>}
+            {!milestones.oneBillion && <div className="store-buttons"><button title="?????">???</button></div>}
           {
             milestones.oneBillion && (
               <>
@@ -751,32 +750,6 @@ function getBlankState() {
       oneThousandEmployees: null,
     },
   };
-}
-
-function renderEmployeeList(employees, type) {
-  const numberOfEmployees = getEmployeesByType(employees, type).length;
-  const heading = (
-    type.charAt(0).toUpperCase() +
-    type.slice(1) +
-    (numberOfEmployees > 1 ? "s" : "")
-  ).replace("_", " ");
-
-  return (
-    getEmployeesByType(employees, type).length > 0 && (
-      <>
-        <h3>
-          {heading} ({numberOfEmployees})
-        </h3>
-        <p className={type}>
-          {getEmployeesByType(employees, type).map((employee, i) => (
-            <span key={`${type}-${i}`} title={employee.name}>
-              {employee.image}
-            </span>
-          ))}
-        </p>
-      </>
-    )
-  );
 }
 
 export default App;
