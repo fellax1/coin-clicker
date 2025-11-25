@@ -182,6 +182,12 @@ function App() {
         oneThousandEmployees: secondsPassed,
       }));
       employerEvent = getMilestoneEvent("oneThousandEmployees", secondsPassed);
+    } else if (employees.length >= 10_000 && !milestones.tenThousandEmployees) {
+      setMilestones((prev) => ({
+        ...prev,
+        tenThousandEmployees: secondsPassed,
+      }));
+      employerEvent = getMilestoneEvent("tenThousandEmployees", secondsPassed);
     }
 
     if (balanceEvent) {
@@ -748,6 +754,7 @@ function getBlankState() {
       fiftyEmployees: null,
       oneHundredEmployees: null,
       oneThousandEmployees: null,
+      tenThousandEmployees: null,
     },
   };
 }

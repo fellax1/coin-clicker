@@ -328,6 +328,17 @@ export function getMilestoneEvent(milestone) {
         },
       };
 
+    case "tenThousandEmployees":
+      return {
+        ...baseEvent,
+        name: "Milestone reached: 10,000 employees 🏆",
+        description: `Congratulations! You have hired 10,000 employees. Enjoy a boost as a reward! Your company is starting to take over the world. Don't be evil!`,
+        consequences: {
+          ...baseEvent.consequences,
+          employeeMultiplier: { size: 50, period: 180 },
+        },
+      };
+
     default:
       return baseEvent;
   }
