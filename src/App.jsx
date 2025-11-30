@@ -655,7 +655,7 @@ function App() {
             }}
           />
             <h3>Luxury Items</h3>
-            {!milestones.oneBillion && <div className="store-buttons"><button title="?????">???</button></div>}
+            {!milestones.oneBillion && <div className="store-buttons"><button disabled title="?????">???</button></div>}
           {
             milestones.oneBillion && (
               <>

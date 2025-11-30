@@ -20,23 +20,13 @@ export const buildings = [
     robotEmployeeEfficiency: 1.0,
   },
   {
-    id: 3,
-    icon: "🏥",
-    name: "Physical Therapy Center",
-    description:
-      "Help your employees recover from injuries and reduce downtime.",
-    cost: 2_500_000,
-    humanEmployeeEfficiency: 1.4,
-    robotEmployeeEfficiency: 1.0,
-  },
-  {
     id: 4,
     icon: "📚",
     name: "Learning center",
     description:
       "A facility to provide ongoing training and development for your staff. Building this also makes all juniors turn into senior employees, and all interns turn into junior employees.",
-    cost: 5_000_000,
-    humanEmployeeEfficiency: 1.55,
+    cost: 2_000_000,
+    humanEmployeeEfficiency: 1.3,
     robotEmployeeEfficiency: 1.0,
     employeesEffect: (employees) => {
       return employees.map((employee) => {
@@ -52,6 +42,16 @@ export const buildings = [
       });
     },
     incomeMultiplierEffect: (incomeMultiplier) => incomeMultiplier < 1 ? 1 : incomeMultiplier,
+  },
+  {
+    id: 3,
+    icon: "🏥",
+    name: "Physical Therapy Center",
+    description:
+      "Help your employees recover from injuries and reduce downtime.",
+    cost: 3_500_000,
+    humanEmployeeEfficiency: 1.6,
+    robotEmployeeEfficiency: 1.0,
   },
   {
     id: 5,

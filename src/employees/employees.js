@@ -6,7 +6,7 @@ export const intern = {
   category: "human",
   salary: 0,
   recruitmentCost: 0,
-  productionRate: 0.1,
+  productionRate: 0.2,
   tutoringCostMultiplier: 0.95,
   name: "Blue eyed intern",
   image: "👼",
@@ -17,7 +17,7 @@ export const juniorEmployee = {
   category: "human",
   salary: 0.5,
   recruitmentCost: 100,
-  productionRate: 1.5,
+  productionRate: 2,
   name: "Emile Paloyeux Junior",
   image: "👷",
 };
@@ -27,7 +27,7 @@ export const seniorEmployee = {
   category: "human",
   salary: 1,
   recruitmentCost: 500,
-  productionRate: 10,
+  productionRate: 15,
   name: "Señor Lopez",
   image: "🧑‍💼",
 };

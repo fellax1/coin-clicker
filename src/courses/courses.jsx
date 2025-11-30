@@ -21,7 +21,7 @@ export function Courses({ courses, completedCourses, count, onClick, hidden }) {
                 );
             })}
             { hidden &&
-                <button title="?????">???</button>
+                <button disabled title="?????">???</button>
             }
         </div>
     )

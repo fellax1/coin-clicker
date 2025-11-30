@@ -3,7 +3,7 @@
     gap: 1rem;
     font-size: 1.75rem;
     cursor: default;
-    filter: grayscale(50%);
+    filter: grayscale(100%);
     padding-top: .75rem;
 
     .building {
