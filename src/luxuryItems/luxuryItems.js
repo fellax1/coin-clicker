@@ -17,7 +17,7 @@ export const luxuryItems = [
         id: 3,
         name: "Gold Island",
         description: "An entire island made of gold. Because why not?",
-        icon: "🛥️",
+        icon: "🏝️",
         cost: 100_000_000_000_000,
     },
 ]
