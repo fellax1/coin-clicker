@@ -147,6 +147,14 @@ main {
   display: flex;
   gap: 2rem;
   padding: 1rem 1rem 5rem;
+
+  &.gold, &.gold section, &.gold button {
+    background: radial-gradient(ellipse farthest-corner at right bottom, #FEDB37 0%, #FDB931 8%, #9f7928 30%, #8A6E2F 40%, transparent 80%),
+                radial-gradient(ellipse farthest-corner at left top, #FFFFFF 0%, #FFFFAC 8%, #D1B464 25%, #5d4a1f 62.5%, #5d4a1f 100%) !important;
+    padding: 1rem;
+    border-radius: 5px;
+    box-shadow: 0 3px 10px black
+  }
 }
 
 section > h2 {

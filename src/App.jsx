@@ -395,9 +395,10 @@ function App() {
 
   const buildingEffects = getTotalBuildingEfficiency(builtBuildings);
 
+      console.log("🚀 ~ App ~ boughtLuxuryItems:", boughtLuxuryItems)
   return (
     <>
-      <main>
+      <main className={boughtLuxuryItems.some(id => id === 4) ? "gold" : ""}>
         <section className="left">
           <h2>Events</h2>
           <Events events={events} />
