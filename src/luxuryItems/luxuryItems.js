@@ -20,4 +20,11 @@ export const luxuryItems = [
         icon: "🏝️",
         cost: 100_000_000_000_000,
     },
+    {
+        id: 4,
+        name: "Gold Planet",
+        description: "A whole planet made of gold. The ultimate symbol of wealth and extravagance. Get on a rocket and go there! For all our sakes!",
+        icon: "🪐",
+        cost: 100_000_000_000_000_000_000,
+    }
 ]
