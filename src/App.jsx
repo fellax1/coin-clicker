@@ -393,7 +393,7 @@ function App() {
     }, 20);
   };
 
-  const buildingEffects = getTotalBuildingEfficiency(builtBuildings);
+  const buildingEfficiency = getTotalBuildingEfficiency(builtBuildings);
 
   return (
     <>
@@ -452,7 +452,7 @@ function App() {
               <span className="bold">
                 {prettyPrintNumber(
                   employees
-                    .reduce((acc, employee) => acc + (employee.productionRate * buildingEffects[employee.category] * temporaryEmployeeMultiplier.size), 0)
+                    .reduce((acc, employee) => acc + (employee.productionRate * buildingEfficiency[employee.category] * temporaryEmployeeMultiplier.size), 0)
                     .toFixed(2),
                 )}{" "}
                 kr
@@ -475,7 +475,7 @@ function App() {
                 {prettyPrintNumber(
                   (
                     employees.reduce(
-                      (acc, employee) => acc + (employee.productionRate * buildingEffects[employee.category] * temporaryEmployeeMultiplier.size),
+                      (acc, employee) => acc + (employee.productionRate * buildingEfficiency[employee.category] * temporaryEmployeeMultiplier.size),
                       0,
                     ) -
                     employees.reduce(
@@ -499,13 +499,13 @@ function App() {
                   : "")
             }
           >
-            <EmployeeList employees={employees} type="AI_singularity" employeeMultiplier={temporaryEmployeeMultiplier.size} buildingEffects={buildingEffects} />
-            <EmployeeList employees={employees} type="robot" employeeMultiplier={temporaryEmployeeMultiplier.size} buildingEffects={buildingEffects} />
-            <EmployeeList employees={employees} type="scientist" employeeMultiplier={temporaryEmployeeMultiplier.size} buildingEffects={buildingEffects} />
-            <EmployeeList employees={employees} type="engineer" employeeMultiplier={temporaryEmployeeMultiplier.size} buildingEffects={buildingEffects} />
-            <EmployeeList employees={employees} type="senior" employeeMultiplier={temporaryEmployeeMultiplier.size} buildingEffects={buildingEffects} />
-            <EmployeeList employees={employees} type="junior" employeeMultiplier={temporaryEmployeeMultiplier.size} buildingEffects={buildingEffects} />
-            <EmployeeList employees={employees} type="intern" employeeMultiplier={temporaryEmployeeMultiplier.size} buildingEffects={buildingEffects} />
+            <EmployeeList employees={employees} type="AI_singularity" employeeMultiplier={temporaryEmployeeMultiplier.size} buildingEffects={buildingEfficiency} />
+            <EmployeeList employees={employees} type="robot" employeeMultiplier={temporaryEmployeeMultiplier.size} buildingEffects={buildingEfficiency} />
+            <EmployeeList employees={employees} type="scientist" employeeMultiplier={temporaryEmployeeMultiplier.size} buildingEffects={buildingEfficiency} />
+            <EmployeeList employees={employees} type="engineer" employeeMultiplier={temporaryEmployeeMultiplier.size} buildingEffects={buildingEfficiency} />
+            <EmployeeList employees={employees} type="senior" employeeMultiplier={temporaryEmployeeMultiplier.size} buildingEffects={buildingEfficiency} />
+            <EmployeeList employees={employees} type="junior" employeeMultiplier={temporaryEmployeeMultiplier.size} buildingEffects={buildingEfficiency} />
+            <EmployeeList employees={employees} type="intern" employeeMultiplier={temporaryEmployeeMultiplier.size} buildingEffects={buildingEfficiency} />
           </div>
         </section>
         <section className="right">

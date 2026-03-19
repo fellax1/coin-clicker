@@ -82,6 +82,27 @@ export const buildings = [
     humanEmployeeEfficiency: 1.0,
     robotEmployeeEfficiency: 3.6,
   },
+  {
+    id: 8,
+    icon: "🤖",
+    name: "Robot Factory",
+    description:
+      "A cutting-edge factory that produces robotic workers automatically.",
+    cost: 50_000_000_000,
+    humanEmployeeEfficiency: 1.0,
+    robotEmployeeEfficiency: 4.0,
+    effect: {
+      interval: 1000,
+      action: (state) => {
+        state.employees.push({
+          id: state.employees.length + 1,
+          type: "robot",
+          name: `Robot Employee ${state.employees.length + 1}`,
+          efficiency: 1,
+        });
+      },
+    }
+  }
 ];
 
 export function getTotalBuildingEfficiency(builtBuildings) {
