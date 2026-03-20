@@ -1,4 +1,4 @@
-import { juniorEmployee, seniorEmployee } from "../employees/employees";
+import { juniorEmployee, robot, seniorEmployee } from "../employees/employees";
 
 export const buildings = [
   {
@@ -82,6 +82,25 @@ export const buildings = [
     humanEmployeeEfficiency: 1.0,
     robotEmployeeEfficiency: 3.6,
   },
+  {
+    id: 8,
+    icon: "🤖",
+    name: "Robot Factory",
+    description:
+      "A cutting-edge factory that produces robotic workers automatically.",
+    cost: 50_000_000_000,
+    humanEmployeeEfficiency: 1.0,
+    robotEmployeeEfficiency: 4.0,
+    effect: {
+      interval: 5, // Effect triggers every 5 seconds
+      action: (employees) => {
+        return [
+          ...employees, 
+          {...robot}
+        ];
+      },
+    }
+  }
 ];
 
 export function getTotalBuildingEfficiency(builtBuildings) {

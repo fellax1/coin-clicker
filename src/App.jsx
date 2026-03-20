@@ -17,7 +17,7 @@ import { Events } from "./events/events.jsx";
 import { getMilestoneEvent, getRandomEvent } from "./events/events.js";
 import { Buildings, BuildingsStore } from "./buildings/buiidings.jsx";
 import { prettyPrintNumber } from "./lib/prettyPrintNumber.js";
-import { getTotalBuildingEfficiency } from "./buildings/buildings.js";
+import { buildings, getTotalBuildingEfficiency } from "./buildings/buildings.js";
 import { LuxuryItems, LuxuryItemsStore } from "./luxuryItems/luxuryItems.jsx";
 import { EmployeeList } from "./employees/employees.jsx";
 import { Courses } from "./courses/courses.jsx";
@@ -262,6 +262,18 @@ function App() {
 
     saveStateInLocalStorage();
     updateMilestones();
+
+    if (eventCyclesPassed > 0) {
+      builtBuildings.forEach((buildingId) => {
+        const building = buildings.find((b) => b.id === buildingId);
+        if (building && building.effect && eventCyclesPassed % building.effect.interval === 0) {
+          setEmployees((prevEmployees) => {
+            const newEmployees = building.effect.action(prevEmployees ?? []);
+            return newEmployees ?? prevEmployees;
+          });
+        }
+      });
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [eventCyclesPassed]);
 
@@ -393,7 +405,7 @@ function App() {
     }, 20);
   };
 
-  const buildingEffects = getTotalBuildingEfficiency(builtBuildings);
+  const buildingEfficiency = getTotalBuildingEfficiency(builtBuildings);
 
       console.log("🚀 ~ App ~ boughtLuxuryItems:", boughtLuxuryItems)
   return (
@@ -453,7 +465,7 @@ function App() {
               <span className="bold">
                 {prettyPrintNumber(
                   employees
-                    .reduce((acc, employee) => acc + (employee.productionRate * buildingEffects[employee.category] * temporaryEmployeeMultiplier.size), 0)
+                    .reduce((acc, employee) => acc + (employee.productionRate * buildingEfficiency[employee.category] * temporaryEmployeeMultiplier.size), 0)
                     .toFixed(2),
                 )}{" "}
                 kr
@@ -476,7 +488,7 @@ function App() {
                 {prettyPrintNumber(
                   (
                     employees.reduce(
-                      (acc, employee) => acc + (employee.productionRate * buildingEffects[employee.category] * temporaryEmployeeMultiplier.size),
+                      (acc, employee) => acc + (employee.productionRate * buildingEfficiency[employee.category] * temporaryEmployeeMultiplier.size),
                       0,
                     ) -
                     employees.reduce(
@@ -500,13 +512,13 @@ function App() {
                   : "")
             }
           >
-            <EmployeeList employees={employees} type="AI_singularity" employeeMultiplier={temporaryEmployeeMultiplier.size} buildingEffects={buildingEffects} />
-            <EmployeeList employees={employees} type="robot" employeeMultiplier={temporaryEmployeeMultiplier.size} buildingEffects={buildingEffects} />
-            <EmployeeList employees={employees} type="scientist" employeeMultiplier={temporaryEmployeeMultiplier.size} buildingEffects={buildingEffects} />
-            <EmployeeList employees={employees} type="engineer" employeeMultiplier={temporaryEmployeeMultiplier.size} buildingEffects={buildingEffects} />
-            <EmployeeList employees={employees} type="senior" employeeMultiplier={temporaryEmployeeMultiplier.size} buildingEffects={buildingEffects} />
-            <EmployeeList employees={employees} type="junior" employeeMultiplier={temporaryEmployeeMultiplier.size} buildingEffects={buildingEffects} />
-            <EmployeeList employees={employees} type="intern" employeeMultiplier={temporaryEmployeeMultiplier.size} buildingEffects={buildingEffects} />
+            <EmployeeList employees={employees} type="AI_singularity" employeeMultiplier={temporaryEmployeeMultiplier.size} buildingEffects={buildingEfficiency} />
+            <EmployeeList employees={employees} type="robot" employeeMultiplier={temporaryEmployeeMultiplier.size} buildingEffects={buildingEfficiency} />
+            <EmployeeList employees={employees} type="scientist" employeeMultiplier={temporaryEmployeeMultiplier.size} buildingEffects={buildingEfficiency} />
+            <EmployeeList employees={employees} type="engineer" employeeMultiplier={temporaryEmployeeMultiplier.size} buildingEffects={buildingEfficiency} />
+            <EmployeeList employees={employees} type="senior" employeeMultiplier={temporaryEmployeeMultiplier.size} buildingEffects={buildingEfficiency} />
+            <EmployeeList employees={employees} type="junior" employeeMultiplier={temporaryEmployeeMultiplier.size} buildingEffects={buildingEfficiency} />
+            <EmployeeList employees={employees} type="intern" employeeMultiplier={temporaryEmployeeMultiplier.size} buildingEffects={buildingEfficiency} />
           </div>
         </section>
         <section className="right">
