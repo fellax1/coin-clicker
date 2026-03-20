@@ -17,7 +17,7 @@ import { Events } from "./events/events.jsx";
 import { getMilestoneEvent, getRandomEvent } from "./events/events.js";
 import { Buildings, BuildingsStore } from "./buildings/buiidings.jsx";
 import { prettyPrintNumber } from "./lib/prettyPrintNumber.js";
-import { getTotalBuildingEfficiency } from "./buildings/buildings.js";
+import { buildings, getTotalBuildingEfficiency } from "./buildings/buildings.js";
 import { LuxuryItems, LuxuryItemsStore } from "./luxuryItems/luxuryItems.jsx";
 import { EmployeeList } from "./employees/employees.jsx";
 import { Courses } from "./courses/courses.jsx";
@@ -262,6 +262,18 @@ function App() {
 
     saveStateInLocalStorage();
     updateMilestones();
+
+    if (eventCyclesPassed > 0) {
+      builtBuildings.forEach((buildingId) => {
+        const building = buildings.find((b) => b.id === buildingId);
+        if (building && building.effect && eventCyclesPassed % building.effect.interval === 0) {
+          setEmployees((prevEmployees) => {
+            const newEmployees = building.effect.action(prevEmployees ?? []);
+            return newEmployees ?? prevEmployees;
+          });
+        }
+      });
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [eventCyclesPassed]);
 

@@ -1,4 +1,4 @@
-import { juniorEmployee, seniorEmployee } from "../employees/employees";
+import { juniorEmployee, robot, seniorEmployee } from "../employees/employees";
 
 export const buildings = [
   {
@@ -92,14 +92,12 @@ export const buildings = [
     humanEmployeeEfficiency: 1.0,
     robotEmployeeEfficiency: 4.0,
     effect: {
-      interval: 1000,
-      action: (state) => {
-        state.employees.push({
-          id: state.employees.length + 1,
-          type: "robot",
-          name: `Robot Employee ${state.employees.length + 1}`,
-          efficiency: 1,
-        });
+      interval: 5, // Effect triggers every 5 seconds
+      action: (employees) => {
+        return [
+          ...employees, 
+          {...robot}
+        ];
       },
     }
   }
